@@ -1,17 +1,9 @@
 #!/usr/bin/env ruby
 require 'gli'
-begin # XXX: Remove this begin/rescue before distributing your app
-require 'eh'
-rescue LoadError
-  STDERR.puts "In development, you need to use `bundle exec bin/eh` to run your app"
-  STDERR.puts "At install-time, RubyGems will make sure lib, etc. are in the load path"
-  STDERR.puts "Feel free to remove this message from bin/eh now"
-  exit 64
-end
 
 include GLI::App
 
-program_desc 'Describe your application here'
+program_desc 'Command line for Event Hub System'
 
 version Eh::VERSION
 
@@ -23,7 +15,7 @@ default_value 'the default'
 arg_name 'The name of the argument'
 flag [:f,:flagname]
 
-desc 'Describe release here'
+desc 'release will package your event hub processor and upload it to a vendor source code repository'
 arg_name 'Describe arguments to release here'
 command :release do |c|
   c.desc 'Describe a switch to release'
