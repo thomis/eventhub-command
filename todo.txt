@@ -1,0 +1,9 @@
+-- -------------------------------------
+-- to do
+-- -------------------------------------
+
+- eh relase -r or --repository plate_store or http path -u user -p password
+- folder filter, default and customize
+- extension filter, default and custmize
+- it could take config settings from a local .ehconfig file
+- would be nice to have a release all feature
