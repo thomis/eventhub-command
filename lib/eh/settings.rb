@@ -25,7 +25,7 @@ class Eh::Settings
   end
 
   def release_dir
-    File.join(repository_root_dir, 'branches', 'master', 'releases')
+    File.join(repository_root_dir, 'branches', 'master', 'releases', 'ruby')
   end
 
   def processes_src_dir
