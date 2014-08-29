@@ -1,59 +1,39 @@
 #!/usr/bin/env ruby
 require 'gli'
+require 'fileutils'
+require 'json'
 
+require 'eh/settings'
 include GLI::App
 
-program_desc 'Command line for Event Hub System'
+program_desc 'Command line tools for EventHub'
 
 version Eh::VERSION
-
-desc 'Describe some switch here'
-switch [:s,:switch]
-
-desc 'Describe some flag here'
-default_value 'the default'
-arg_name 'The name of the argument'
-flag [:f,:flagname]
-
-desc 'release will package your event hub processor and upload it to a vendor source code repository'
-arg_name 'Describe arguments to release here'
-command :release do |c|
-  c.desc 'Describe a switch to release'
-  c.switch :s
-
-  c.desc 'Describe a flag to release'
-  c.default_value 'default'
-  c.flag :f
-  c.action do |global_options,options,args|
-
-    # Your command logic here
-     
-    # If you have any errors, just raise them
-    # raise "that command made no sense"
-
-    puts "release command ran"
+config_file = File.expand_path(File.join('~', '.eh'))
+if File.readable?(config_file)
+  settings = Eh::Settings.load(config_file)
+  Eh::Settings.current = settings
+else
+  puts "Config file missing: ~/.eh, will create it now..."
+  puts "Please specify the Eventhub SVN root directory (i.e. the directory which contains the 'branches' directory"
+  input = STDIN.gets.chomp
+  data = {'repository_root_dir' => input}
+  File.open(config_file, 'w') do |file|
+    file.write(JSON.dump(data))
   end
+  puts "Config file written to #{config_file}. Please try again."
+  exit
 end
 
-pre do |global,command,options,args|
-  # Pre logic here
-  # Return true to proceed; false to abort and not call the
-  # chosen command
-  # Use skips_pre before a command to skip this block
-  # on that command only
-  true
+
+require 'eh'
+
+# Use argument validation
+arguments :strict
+
+accept Array do |value|
+  value.split(/,/).map(&:strip)
 end
 
-post do |global,command,options,args|
-  # Post logic here
-  # Use skips_post before a command to skip this
-  # block on that command only
-end
-
-on_error do |exception|
-  # Error logic here
-  # return false to skip default error handling
-  true
-end
-
+switch([:v, :verbose], :desc => "Show additional output.")
 exit run(ARGV)

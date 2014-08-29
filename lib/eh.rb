@@ -1,4 +1,6 @@
-require 'eh/version.rb'
-
-# Add requires for other files you add to your project here, so
-# you just need to require this one file in your bin file
+module Eh
+end
+require 'eh/version'
+require 'eh/settings'
+require 'eh/commands/release'
+require 'eh/commands/package'
