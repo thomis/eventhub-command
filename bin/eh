@@ -4,6 +4,8 @@ require 'fileutils'
 require 'json'
 
 require 'eh/settings'
+require 'eh/version'
+
 include GLI::App
 
 program_desc 'Command line tools for EventHub'
