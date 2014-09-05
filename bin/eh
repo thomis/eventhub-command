@@ -2,9 +2,7 @@
 require 'gli'
 require 'fileutils'
 require 'json'
-
-require 'eh/settings'
-require 'eh/version'
+require 'eh'
 
 include GLI::App
 
@@ -28,7 +26,7 @@ else
 end
 
 
-require 'eh'
+require 'eh-commands'
 
 # Use argument validation
 arguments :strict

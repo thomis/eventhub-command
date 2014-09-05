@@ -1,6 +1,6 @@
 # Ensure we require the local version and not one we might have installed already
 require File.join([File.dirname(__FILE__),'lib','eh','version.rb'])
-spec = Gem::Specification.new do |s| 
+spec = Gem::Specification.new do |s|
   s.name = 'eventhub-command'
   s.version = Eh::VERSION
   s.author = ['Pascal Betz','Thomas Steiner']

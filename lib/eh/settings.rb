@@ -1,4 +1,3 @@
-require 'json'
 class Eh::Settings
   attr_reader :data
   def self.load(file)
@@ -25,11 +24,11 @@ class Eh::Settings
   end
 
   def release_dir
-    File.join(repository_root_dir, 'branches', 'master', 'releases', 'ruby')
+    File.join(repository_root_dir, 'releases', 'ruby')
   end
 
   def processes_src_dir
-    File.join(repository_root_dir, 'branches', 'master', 'src', 'process')
+    File.join(repository_root_dir, 'src', 'process')
   end
 
   def package_tmp_dir
