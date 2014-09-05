@@ -1,13 +1,15 @@
 # Ensure we require the local version and not one we might have installed already
 require File.join([File.dirname(__FILE__),'lib','eh','version.rb'])
 spec = Gem::Specification.new do |s| 
-  s.name = 'eh'
+  s.name = 'eventhub-command'
   s.version = Eh::VERSION
-  s.author = 'Your Name Here'
-  s.email = 'your@email.address.com'
-  s.homepage = 'http://your.website.com'
+  s.author = ['Pascal Betz','Thomas Steiner']
+  s.email = ['pascal.betz@simplificator.com','thomas.steiner@ikey.ch']
+  s.homepage = 'http://github.com/thomis/eventhub-command'
   s.platform = Gem::Platform::RUBY
-  s.summary = 'A description of your project'
+  s.description = 'EventHub Command Line Tool which supports you with various Event Hub related administrative development features.'
+  s.summary = 'EventHub Command Line Tool'
+  s.license = "MIT"
   s.files = `git ls-files`.split("
 ")
   s.require_paths << 'lib'
@@ -16,8 +18,8 @@ spec = Gem::Specification.new do |s|
   s.rdoc_options << '--title' << 'eh' << '--main' << 'README.rdoc' << '-ri'
   s.bindir = 'bin'
   s.executables << 'eh'
-  s.add_development_dependency('rake')
-  s.add_development_dependency('rdoc')
-  s.add_development_dependency('aruba')
+  s.add_development_dependency('rake', '~> 10.1')
+  s.add_development_dependency('rdoc', '~> 4.1')
+  s.add_development_dependency('aruba', '~> 0.5')
   s.add_runtime_dependency('gli','2.12.0')
 end
