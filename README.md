@@ -12,7 +12,7 @@ Event Hub Command Line Tool includes the following features
 Install gem and make command available provided by this gem
 
 ~~~ sh
-gem 'eventhub-command'
+gem i eventhub-command
 rbenv rehash
 ~~~
 
