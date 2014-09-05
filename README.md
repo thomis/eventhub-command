@@ -23,7 +23,7 @@ Config file missing: ~/.eh, will create it now...
 Please specify the Eventhub SVN root directory (i.e. the directory which contains the 'src', 'release', ... directories
 /Users/username/dev/event_hub
 Config file written to /Users/username/.eh. Please try again.
-$
+$ 
 ~~~
 
 ## Usage
