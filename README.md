@@ -9,6 +9,11 @@ Event Hub Command Line Tool includes the following features
 
 ## Installation
 
-  gem 'eventhub-command'
+Install gem and make command available provided by this gem
+
+~~~ sh
+gem 'eventhub-command'
+rbenv rehash
+~~~
 
 ## Usage
