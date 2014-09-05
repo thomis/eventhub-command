@@ -9,11 +9,21 @@ Event Hub Command Line Tool includes the following features
 
 ## Installation
 
-Install gem and make command available provided by this gem
+Install gem and make command provided by this gem available
 
 ~~~ sh
-gem i eventhub-command
-rbenv rehash
+$ gem i eventhub-command
+$ rbenv rehash
+~~~
+
+First time running the command
+~~~ sh
+$ eh
+Config file missing: ~/.eh, will create it now...
+Please specify the Eventhub SVN root directory (i.e. the directory which contains the 'src', 'release', ... directories
+/Users/username/dev/event_hub
+Config file written to /Users/username/.eh. Please try again.
+$
 ~~~
 
 ## Usage
