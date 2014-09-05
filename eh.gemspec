@@ -7,8 +7,8 @@ spec = Gem::Specification.new do |s|
   s.email = ['pascal.betz@simplificator.com','thomas.steiner@ikey.ch']
   s.homepage = 'http://github.com/thomis/eventhub-command'
   s.platform = Gem::Platform::RUBY
-  s.description = 'EventHub Command Line Tool which supports you with various Event Hub related administrative development features.'
-  s.summary = 'EventHub Command Line Tool'
+  s.description = 'Event Hub Command Line Tool which supports you with various Event Hub related administrative development features.'
+  s.summary = 'Event Hub Command Line Tool'
   s.license = "MIT"
   s.files = `git ls-files`.split("
 ")
