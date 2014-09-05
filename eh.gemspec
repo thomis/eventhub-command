@@ -14,7 +14,7 @@ spec = Gem::Specification.new do |s|
 ")
   s.require_paths << 'lib'
   s.has_rdoc = true
-  s.extra_rdoc_files = ['README.rdoc','eh.rdoc']
+  s.extra_rdoc_files = ['README.md','eh.rdoc']
   s.rdoc_options << '--title' << 'eh' << '--main' << 'README.rdoc' << '-ri'
   s.bindir = 'bin'
   s.executables << 'eh'
