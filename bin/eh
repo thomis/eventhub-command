@@ -2,7 +2,7 @@
 require 'gli'
 require 'fileutils'
 require 'json'
-require 'eh'
+require 'eh' # eh needs to be required in advance so we can access Eh::Settings
 
 include GLI::App
 
@@ -15,7 +15,7 @@ if File.readable?(config_file)
   Eh::Settings.current = settings
 else
   puts "Config file missing: ~/.eh, will create it now..."
-  puts "Please specify the Eventhub SVN root directory (i.e. the directory which contains the 'branches' directory"
+  puts "Please specify the Eventhub SVN root directory (i.e. the directory which contains the 'src', 'release', ... directories"
   input = STDIN.gets.chomp
   data = {'repository_root_dir' => input}
   File.open(config_file, 'w') do |file|
