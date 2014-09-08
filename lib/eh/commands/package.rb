@@ -49,13 +49,13 @@ command :package do |c|
 
       puts "Packaging '#{processor_name}'"
 
-      arguments = ['tmp', 'logs', 'exceptions'].map do |item|
+      arguments = ['tmp', 'logs', 'exceptions', 'log'].map do |item|
         expanded = File.join(source, item, '*')
         "-x \"#{expanded}\""
       end.join(' ')
       arguments << " -q" unless arguments['v']
 
-      cmd = "zip -FS -r #{destination} #{source} #{arguments}"
+      cmd = "cd #{source_dir} && zip -FS -r #{destination} #{processor_name} #{arguments}"
       puts "Packaging '#{processor_name}' to #{destination} with \"#{cmd}\"" if global_options['v']
       system(cmd)
     end
