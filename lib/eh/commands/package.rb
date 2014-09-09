@@ -2,7 +2,7 @@ desc 'Packages processors to zip files'
 command :package do |c|
   c.flag([:x, :exclude], :desc => "Exclude processors by name.", :type => Array, :long_desc => "You can specify multiple processors by providing a comma-separated list.")
   c.flag([:p, :processors], :desc => "Specify what processors to package", :type => Array, :long_desc => "You can specify multiple processors by providing a comma-separated list.")
-  c.flag([:d, :destination], :desc => "Destination directory to place created zip files.", :default_value => Eh::Settings.current.package_tmp_dir)
+  c.flag([:d, :destination], :desc => "Destination directory to place created zip files.", :default_value => Eh::Settings.current.release_dir)
   c.flag([:s, :source], :desc => "Source directory to read processors from.", :default_value => Eh::Settings.current.processes_src_dir)
 
   c.action do |global_options, options, args|
