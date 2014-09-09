@@ -45,7 +45,7 @@ command :package do |c|
     included_processor_names.each do |processor_name|
 
       directory = File.join(source_dir, processor_name) # last slash could be omitted
-      zipfile_name = "/tmp/#{processor_name}.zip"
+      zipfile_name = File.join(destination_dir, "#{processor_name}.zip")
 
       options = {"directories-recursively"=>true}
 
