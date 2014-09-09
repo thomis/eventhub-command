@@ -1,4 +1,4 @@
-desc 'Packages processors to zip files'
+desc 'Releases processor zip files to destination'
 command :release do |c|
   c.flag([:d, :destination], :desc => "Destination directory to place created zip files.", :default_value => Eh::Settings.current.release_dir)
   c.flag([:s, :source], :desc => "Source directory to read processors from.", :default_value => Eh::Settings.current.package_tmp_dir)

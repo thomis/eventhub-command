@@ -39,25 +39,66 @@ command :package do |c|
 
 
     # make sure destination directory exists
-    FileUtils.mkdir_p(destination_dir)
+    FileUtils.mkdir_p(destination_dir)    
 
     # Zip all processors
     included_processor_names.each do |processor_name|
 
-      source = File.join(source_dir, processor_name)
-      destination = File.join(destination_dir, "#{processor_name}.zip")
+      directory = File.join(source_dir, processor_name) # last slash could be omitted
+      zipfile_name = "/tmp/#{processor_name}.zip"
 
-      puts "Packaging '#{processor_name}'"
+      options = {"directories-recursively"=>true}
 
-      arguments = ['tmp', 'logs', 'exceptions', 'log'].map do |item|
-        expanded = File.join(source, item, '*')
-        "-x \"#{expanded}\""
-      end.join(' ')
-      arguments << " -q" unless arguments['v']
+      Zip::File.open(zipfile_name,Zip::File::CREATE) do |zipfile|
+        
+        #zipfile.add(processor_name, directory)
+        [directory].each{ |file_to_be_zipped|
 
-      cmd = "cd #{source_dir} && zip -FS -r #{destination} #{processor_name} #{arguments}"
-      puts "Packaging '#{processor_name}' to #{destination} with \"#{cmd}\"" if global_options['v']
-      system(cmd)
+          if File.directory?(file_to_be_zipped)
+            # should skip directories
+            next if options["directories-skip"]
+
+            # should recursively add directory            
+            if options["directories-recursively"]
+              directory = file_to_be_zipped
+              puts "zipper: archiving directory: #{directory}"
+              directory_chosen_pathname = options["directories-recursively-splat"] ? directory : File.dirname(directory)  
+              directory_pathname = Pathname.new(directory_chosen_pathname)
+              files = Dir[File.join(directory, '**', '**')]
+              files.delete_if {|filename| filename.include?("log") || filename.include?("logs") || filename.include?("exceptions") || filename.include?("pids") || filename.include?("tmp") }
+              files.each do |file|                
+                file_pathname = Pathname.new(file)
+                file_relative_pathname = file_pathname.relative_path_from(directory_pathname)
+                zipfile.add(file_relative_pathname,file)
+              end
+              next
+            end
+          end
+
+          filename = File.basename(file_to_be_zipped)
+
+          puts "zipper: archiving #{file_to_be_zipped} as #{filename} into #{zipfile}"
+
+          zipfile.add(filename,file_to_be_zipped)
+        }
+      end
+
+
+
+      #source = File.join(source_dir, processor_name)
+      #destination = File.join(destination_dir, "#{processor_name}.zip")
+
+      #puts "Packaging '#{processor_name}'"
+
+      #arguments = ['tmp', 'logs', 'exceptions', 'log'].map do |item|
+      #  expanded = File.join(source, item, '*')
+      #  "-x \"#{expanded}\""
+      #end.join(' ')
+      #arguments << " -q" unless arguments['v']
+      #puts source_dir
+      #cmd = "cd #{source_dir} && zip -FS -r #{destination} #{processor_name} #{arguments}"
+      #puts "Packaging '#{processor_name}' to #{destination} with \"#{cmd}\"" if global_options['v']
+      #system(cmd)
     end
 
     puts "Done packaging #{included_processor_names.size} processors"

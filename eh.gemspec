@@ -22,4 +22,5 @@ spec = Gem::Specification.new do |s|
   s.add_development_dependency('rdoc', '~> 4.1')
   s.add_development_dependency('aruba', '~> 0.5')
   s.add_runtime_dependency('gli','2.12.0')
+  s.add_runtime_dependency('rubyzip')
 end
