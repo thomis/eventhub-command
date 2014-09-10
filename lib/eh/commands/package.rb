@@ -68,7 +68,7 @@ command :package do |c|
               directory_chosen_pathname = options["directories-recursively-splat"] ? directory : File.dirname(directory)  
               directory_pathname = Pathname.new(directory_chosen_pathname)
               files = Dir[File.join(directory, '**', '**')]
-              files.delete_if {|filename| filename.include?("log") || filename.include?("logs") || filename.include?("exceptions") || filename.include?("pids") || filename.include?("tmp") }
+              files.delete_if {|filename| ["log", "logs", "exceptions", "pids", "tmp"].include?(filename) }
               files.each do |file|                
                 file_pathname = Pathname.new(file)
                 file_relative_pathname = file_pathname.relative_path_from(directory_pathname)
