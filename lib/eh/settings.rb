@@ -31,6 +31,14 @@ class Eh::Settings
     File.join(repository_root_dir, 'src', 'process')
   end
 
+  def rails_src_dir
+    File.join(repository_root_dir, 'src', 'rails', 'console')
+  end
+
+  def rails_release_dir
+    File.join(repository_root_dir, 'releases', 'rails')
+  end
+
   def package_tmp_dir
     './tmp'
   end

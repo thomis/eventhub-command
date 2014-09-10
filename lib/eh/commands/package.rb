@@ -47,6 +47,9 @@ command :package do |c|
       directory = File.join(source_dir, processor_name) # last slash could be omitted
       zipfile_name = File.join(destination_dir, "#{processor_name}.zip")
 
+      # remove zip before we create a new one
+      FileUtils.rm zipfile_name, :force => true 
+
       options = {"directories-recursively"=>true}
 
       Zip::File.open(zipfile_name,Zip::File::CREATE) do |zipfile|
