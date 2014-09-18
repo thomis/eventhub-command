@@ -39,6 +39,10 @@ class Eh::Settings
     File.join(repository_root_dir, 'releases', 'rails')
   end
 
+  def source_config_dir
+    File.join(repository_root_dir, 'branches', 'master', 'config')
+  end
+
   def package_tmp_dir
     './tmp'
   end
