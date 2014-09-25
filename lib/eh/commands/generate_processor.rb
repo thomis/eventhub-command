@@ -21,6 +21,7 @@ command :generate_processor do |c|
     checkout_git_repo(template_temporary_dir)
 
     FileUtils.cp_r template_temporary_dir, destination_dir
+    FileUtils.rm_rf File.join(destination_dir, ".git")
 
     puts "Generating processor #{processor_module_name}:#{processor_class_name} in #{destination_dir}"
     Dir.glob(destination_dir + "/**/*.erb") do |file|
