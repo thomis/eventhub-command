@@ -1,16 +1,20 @@
 desc 'Generates a template for a processor'
+arg_name 'module_name'
+arg_name 'processor_name'
+
 command :generate_processor do |c|
   c.action do |global_options, options, args|
     require 'active_support/core_ext/string/inflections'
     require 'fileutils'
     require 'erb'
 
-    unless args.size == 2
-      raise "Needs exactly 2 arguments: eh generate_processor ModuleName ProcessorName"
+    if args.size != 2
+      puts "Needs exactly 2 arguments: eh generate_processor ModuleName ProcessorName"
+      exit -1
     end
 
-    processor_module_name =     args[0].camelcase
-    processor_class_name =  args[1].camelcase
+    processor_module_name = args[0].camelcase
+    processor_class_name = args[1].camelcase
     underscored_processor_module_name = processor_module_name.underscore
     underscored_processor_class_name = processor_class_name.underscore
 
@@ -22,8 +26,10 @@ command :generate_processor do |c|
 
     FileUtils.cp_r template_temporary_dir, destination_dir
     FileUtils.rm_rf File.join(destination_dir, ".git")
+    FileUtils.rm File.join(destination_dir, 'README.md')
+    FileUtils.mv File.join(destination_dir, 'README.template'), File.join(destination_dir, 'README.md')
 
-    puts "Generating processor #{processor_module_name}:#{processor_class_name} in #{destination_dir}"
+    puts "Generating processor #{processor_module_name}::#{processor_class_name} in #{destination_dir}"
     Dir.glob(destination_dir + "/**/*.erb") do |file|
       template = ERB.new(File.read(file))
 
