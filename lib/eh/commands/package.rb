@@ -15,8 +15,9 @@ command :package do |c|
       File.basename(dir)
     end
 
+    # Drop files, only use directories
     processor_names.delete_if do |item|
-      File.directory?(item)
+      !File.directory?("#{source_dir}/#{item}")
     end
 
     included_processor_names = processor_names
