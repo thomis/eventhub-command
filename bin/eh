@@ -3,7 +3,7 @@ require 'gli'
 require 'fileutils'
 require 'json'
 require 'eh' # eh needs to be required in advance so we can access Eh::Settings
-
+require 'bundler'
 include GLI::App
 
 program_desc 'Command line tools for EventHub'
