@@ -1,6 +1,5 @@
 desc 'Generates a template for a processor'
-arg_name 'module_name'
-arg_name 'processor_name'
+arg_name 'module_name processor_name'
 
 command :generate_processor do |c|
   c.action do |global_options, options, args|
