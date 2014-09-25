@@ -23,20 +23,28 @@ class Eh::Settings
     File.expand_path(data['repository_root_dir'])
   end
 
+  def releases_dir
+    File.join(repository_root_dir, 'releases')
+  end
+
+  def rails_release_dir
+    File.join(releases_dir, 'rails')
+  end
+
   def ruby_release_dir
-    File.join(repository_root_dir, 'releases', 'ruby')
+    File.join(releases_dir, 'ruby')
   end
 
   def processes_src_dir
     File.join(repository_root_dir, 'src', 'process')
   end
 
-  def rails_src_dir
-    File.join(repository_root_dir, 'src', 'rails', 'console')
+  def deployment_dir
+    File.join(repository_root_dir, 'src', 'deployment')
   end
 
-  def rails_release_dir
-    File.join(repository_root_dir, 'releases', 'rails')
+  def rails_src_dir
+    File.join(repository_root_dir, 'src', 'rails', 'console')
   end
 
   def source_config_dir
