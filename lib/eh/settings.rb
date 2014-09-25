@@ -23,7 +23,7 @@ class Eh::Settings
     File.expand_path(data['repository_root_dir'])
   end
 
-  def release_dir
+  def ruby_release_dir
     File.join(repository_root_dir, 'releases', 'ruby')
   end
 
