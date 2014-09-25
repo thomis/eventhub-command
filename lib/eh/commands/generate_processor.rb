@@ -35,8 +35,10 @@ command :generate_processor do |c|
     end
 
     replacements = {
+      "underscored_processor_module_name" => underscored_processor_module_name,
       "underscored_processor_class_name" => underscored_processor_class_name,
-      "underscored_processor_module_name" => underscored_processor_module_name
+      "processor_module_name" => processor_module_name,
+      "processor_class_name" => processor_class_name
     }
 
     rename_files_with_replacements(destination_dir, replacements)
