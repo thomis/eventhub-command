@@ -59,4 +59,8 @@ class Eh::Settings
     './tmp'
   end
 
+  def template_tmp_dir
+    "/tmp/eventhub-processor-template/"
+  end
+
 end

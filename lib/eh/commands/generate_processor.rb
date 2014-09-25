@@ -21,10 +21,10 @@ command :generate_processor do |c|
     destination_dir = Eh::Settings.current.processes_src_dir
     destination_dir = File.join(destination_dir, "#{underscored_processor_module_name}.#{underscored_processor_class_name}")
 
-    template_temporary_dir = "/tmp/eventhub-processor-template/"
-    checkout_git_repo(template_temporary_dir)
+    template_tmp_dir = Eh::Settings.current.template_tmp_dir
+    checkout_git_repo(template_tmp_dir)
 
-    FileUtils.cp_r template_temporary_dir, destination_dir
+    FileUtils.cp_r template_tmp_dir, destination_dir
     FileUtils.rm_rf File.join(destination_dir, ".git")
     FileUtils.rm File.join(destination_dir, 'README.md')
 
@@ -48,7 +48,7 @@ command :generate_processor do |c|
 
     rename_files_with_replacements(destination_dir, replacements)
 
-    FileUtils.rm_rf template_temporary_dir
+    FileUtils.rm_rf template_tmp_dir
 
     puts "Done."
   end
