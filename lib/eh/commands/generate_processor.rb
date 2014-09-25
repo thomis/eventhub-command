@@ -39,12 +39,12 @@ command :generate_processor do |c|
       FileUtils.mv file, File.join(File.dirname(file), File.basename(file, ".erb"))
     end
 
-    replacements = {
-      "underscored_processor_module_name" => underscored_processor_module_name,
-      "underscored_processor_class_name" => underscored_processor_class_name,
-      "processor_module_name" => processor_module_name,
-      "processor_class_name" => processor_class_name
-    }
+    replacements = [
+      ["underscored_processor_module_name", underscored_processor_module_name],
+      ["underscored_processor_class_name", underscored_processor_class_name],
+      ["processor_module_name", processor_module_name],
+      ["processor_class_name", processor_class_name]
+    ]
 
     rename_files_with_replacements(destination_dir, replacements)
 
