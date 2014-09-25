@@ -40,7 +40,11 @@ class Eh::Settings
   end
 
   def source_config_dir
-    File.join(repository_root_dir, 'branches', 'master', 'config')
+    File.join(repository_root_dir, 'config')
+  end
+
+  def processor_template_repository_url
+    "git@github.com:thomis/eventhub-processor-template.git"
   end
 
   def package_tmp_dir
