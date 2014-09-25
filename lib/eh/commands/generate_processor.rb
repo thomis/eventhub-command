@@ -21,6 +21,11 @@ command :generate_processor do |c|
     destination_dir = Eh::Settings.current.processes_src_dir
     destination_dir = File.join(destination_dir, "#{underscored_processor_module_name}.#{underscored_processor_class_name}")
 
+    if Dir.exists? destination_dir
+      puts "#{destination_dir} already exists!"
+      exit -1
+    end
+
     template_tmp_dir = Eh::Settings.current.template_tmp_dir
     checkout_git_repo(template_tmp_dir)
 
