@@ -52,7 +52,7 @@ class Eh::Settings
   end
 
   def processor_template_repository_url
-    "git@github.com:thomis/eventhub-processor-template.git"
+    "https://github.com/thomis/eventhub-processor-template.git"
   end
 
   def package_tmp_dir
