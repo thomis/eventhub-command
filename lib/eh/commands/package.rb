@@ -59,7 +59,6 @@ command :package do |c|
 
       Zip::File.open(zipfile_name,Zip::File::CREATE) do |zipfile|
 
-        #zipfile.add(processor_name, directory)
         [directory].each{ |file_to_be_zipped|
 
           if File.directory?(file_to_be_zipped)
@@ -73,7 +72,11 @@ command :package do |c|
               directory_chosen_pathname = options["directories-recursively-splat"] ? directory : File.dirname(directory)
               directory_pathname = Pathname.new(directory_chosen_pathname)
               files = Dir[File.join(directory, '**', '**')]
-              files.delete_if {|filename| ["log", "logs", "exceptions", "pids", "tmp"].include?(filename) }
+
+              # pattern to exclude unwanted folders
+              re = Regexp.new("^#{directory}/(log|logs|exceptions|pids|tmp)")
+              files.delete_if {|filename| re.match(filename)}
+
               files.each do |file|
                 file_pathname = Pathname.new(file)
                 file_relative_pathname = file_pathname.relative_path_from(directory_pathname)
