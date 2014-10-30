@@ -35,8 +35,8 @@ class Eh::Settings
     File.join(releases_dir, 'ruby')
   end
 
-  def processes_src_dir
-    File.join(repository_root_dir, 'src', 'process')
+  def processors_src_dir
+    File.join(repository_root_dir, 'src', 'ruby')
   end
 
   def deployment_dir

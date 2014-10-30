@@ -17,7 +17,7 @@ command :generate_processor do |c|
     underscored_processor_module_name = processor_module_name.underscore
     underscored_processor_class_name = processor_class_name.underscore
 
-    destination_dir = Eh::Settings.current.processes_src_dir
+    destination_dir = Eh::Settings.current.processors_src_dir
     destination_dir = File.join(destination_dir, "#{underscored_processor_module_name}.#{underscored_processor_class_name}")
 
     if Dir.exists? destination_dir
