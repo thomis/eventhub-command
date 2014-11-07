@@ -52,7 +52,7 @@ class Eh::Settings
   end
 
   def processor_template_repository_url
-    "https://github.com/thomis/eventhub-processor-template.git"
+    'https://github.com/thomis/eventhub-processor-template.git'
   end
 
   def package_tmp_dir
@@ -60,7 +60,10 @@ class Eh::Settings
   end
 
   def template_tmp_dir
-    "/tmp/eventhub-processor-template/"
+    '/tmp/eventhub-processor-template/'
   end
 
+  def deployment_management_files
+    [ File.join(deployment_dir, 'management', 'launcher.rb') ]
+  end
 end

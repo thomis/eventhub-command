@@ -46,6 +46,10 @@ command :package do |c|
     # make sure destination directory exists
     FileUtils.mkdir_p(destination_dir)
 
+    Eh::Settings.current.deployment_management_files.each do |file|
+      FileUtils.cp(file, destination_dir)
+    end
+
     # Zip all processors
     included_processor_names.each do |processor_name|
 
