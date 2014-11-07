@@ -9,13 +9,13 @@ command :package_rails do |c|
     source_dir = options['s']
     destination_dir = options['d']
 
+    skip_files = ["#{source_dir}/config/database.yml"]
+
     puts "Will package rails console from #{source_dir} to #{destination_dir}"
 
     console = Dir["#{source_dir}"]
 
     FileUtils.mkdir_p(destination_dir)
-
-    options = {"directories-recursively"=>true}
 
     zipfile_name = File.join(destination_dir, "console.zip")
     directory = source_dir
@@ -30,28 +30,30 @@ command :package_rails do |c|
         if File.directory?(file_to_be_zipped)
           # should skip directories
           next if options["directories-skip"]
-          # should recursively add directory
-          if options["directories-recursively"]
-            directory = file_to_be_zipped
-            puts "zipper: archiving directory: #{directory}"
-            directory_chosen_pathname = options["directories-recursively-splat"] ? directory : File.dirname(directory)
-            directory_pathname = Pathname.new(directory_chosen_pathname)
-            files = Dir[File.join(directory, '**', '**')]
 
-            files.delete_if do |filename|
-              ["#{source_dir}/log", "#{source_dir}/logs", "#{source_dir}/exceptions", "#{source_dir}/tmp"].any? do |prefix|
-                filename.start_with?(prefix)
-              end
-            end
+          directory = file_to_be_zipped
+          puts "zipper: archiving directory: #{directory}"
+          directory_chosen_pathname = options["directories-recursively-splat"] ? directory : File.dirname(directory)
+          directory_pathname = Pathname.new(directory_chosen_pathname)
+          files = Dir[File.join(directory, '**', '**')]
 
-            files.each do |file|
-              file_pathname = Pathname.new(file)
-              file_relative_pathname = file_pathname.relative_path_from(directory_pathname)
-              zipfile.add(file_relative_pathname,file)
+          files.delete_if do |filename|
+            ["#{source_dir}/log", "#{source_dir}/logs", "#{source_dir}/exceptions", "#{source_dir}/tmp"].any? do |prefix|
+              filename.start_with?(prefix)
             end
-            next
           end
+
+          files.each do |file|
+            next if skip_files.include? file
+
+            file_pathname = Pathname.new(file)
+            file_relative_pathname = file_pathname.relative_path_from(directory_pathname)
+            zipfile.add(file_relative_pathname,file)
+          end
+
+          next
         end
+
         filename = File.basename(file_to_be_zipped)
 
         puts "zipper: archiving #{file_to_be_zipped} as #{filename} into #{zipfile}"
