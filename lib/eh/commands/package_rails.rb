@@ -44,7 +44,10 @@ command :package_rails do |c|
           end
 
           files.each do |file|
-            next if skip_files.include? file
+            if skip_files.include? file
+              puts "skipping #{file}"
+              next
+            end
 
             file_pathname = Pathname.new(file)
             file_relative_pathname = file_pathname.relative_path_from(directory_pathname)
