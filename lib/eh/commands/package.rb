@@ -79,7 +79,7 @@ command :package do |c|
 
               # pattern to exclude unwanted folders
               re = Regexp.new("^#{directory}/(log|logs|exceptions|pids|tmp)")
-              files.delete_if {|filename| re.match(filename)}
+              files.delete_if {|filename| re.match(filename) if File.directory?(filename)}
 
               files.each do |file|
                 file_pathname = Pathname.new(file)
