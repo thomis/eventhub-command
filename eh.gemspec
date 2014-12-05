@@ -24,7 +24,6 @@ spec = Gem::Specification.new do |s|
   s.add_runtime_dependency('gli','2.12.0')
   s.add_runtime_dependency('rubyzip', '~> 1.0')
   s.add_runtime_dependency('activesupport', '~> 4.1')
-  s.add_runtime_dependency('net-scp')
   s.add_runtime_dependency('net-ssh-open3')
 
 end
