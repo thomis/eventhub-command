@@ -18,7 +18,6 @@ class Eh::Settings
     @data = data
   end
 
-
   def repository_root_dir
     File.expand_path(data['repository_root_dir'])
   end
