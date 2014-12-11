@@ -1,7 +1,5 @@
 desc 'Packages Rails Console to zip file'
 command :package_rails do |c|
-  #c.flag([:x, :exclude], :desc => "Exclude processors by name.", :type => Array, :long_desc => "You can specify multiple processors by providing a comma-separated list.")
-  #c.flag([:p, :processors], :desc => "Specify what processors to package", :type => Array, :long_desc => "You can specify multiple processors by providing a comma-separated list.")
   c.flag([:d, :destination], :desc => "Destination directory to place created zip file.", :default_value => Eh::Settings.current.rails_release_dir)
   c.flag([:s, :source], :desc => "Source directory to read rails console from.", :default_value => Eh::Settings.current.rails_src_dir)
 

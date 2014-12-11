@@ -1,0 +1,6 @@
+localhost:
+  node_env: development
+  hosts:
+    - host: localhost
+      port: 2222
+      user: s_cme
