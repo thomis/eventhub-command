@@ -1,16 +1,11 @@
 class Net::SSH::Connection::Session
-  class CommandFailed < StandardError
-  end
-
-  class CommandExecutionFailed < StandardError
-  end
 
   def exec_sc!(command)
     stdout_data,stderr_data = "",""
     exit_code,exit_signal = nil,nil
     self.open_channel do |channel|
       channel.exec(command) do |_, success|
-        raise CommandExecutionFailed, "Command \"#{command}\" was unable to execute" unless success
+        raise "Command \"#{command}\" was unable to execute" unless success
 
         channel.on_data do |_, data|
           stdout_data += data
@@ -30,7 +25,7 @@ class Net::SSH::Connection::Session
       end
     end
     self.loop
-    raise CommandFailed, stderr_data unless exit_code == 0
+    raise stderr_data unless exit_code == 0
 
     {
       stdout: stdout_data,

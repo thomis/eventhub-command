@@ -88,7 +88,7 @@ class Deployer::Executor
       exit_code = $?
     end
 
-    raise CommandFailed, "Command \"#{command}\" returned exit code #{exit_code}" unless exit_code.success?
+    raise "Command \"#{command}\" returned exit code #{exit_code}" unless exit_code.success?
 
     result = {
       stdout: output,
