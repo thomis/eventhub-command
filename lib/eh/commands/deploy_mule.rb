@@ -44,7 +44,8 @@ command :deploy_mule do |c|
 
     Deployer::Executor.new(stage, verbose: options[:verbose]) do |executor|
       # create required directories
-      executor.execute("mkdir -p #{base_dir} ; mkdir -p #{File.join(cached_copy_dir, 'mule')}")
+      executor.execute("mkdir -p #{base_dir}")
+      executor.execute("rm -rf #{cached_copy_dir}")
 
       if options[:deploy_via] == 'scp'
         # upload pre-packaged processor via scp
