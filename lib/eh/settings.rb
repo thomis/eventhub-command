@@ -65,4 +65,8 @@ class Eh::Settings
   def deployment_management_files
     [ File.join(deployment_dir, 'management', 'launcher.rb') ]
   end
+
+  def stages_dir
+    File.expand_path("~/.eh-stages")
+  end
 end
