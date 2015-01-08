@@ -1,7 +1,7 @@
 desc 'Deploys the app'
 arg_name 'stage', optional: true
-command :deploy do |c|
 
+command :deploy do |c|
   c.flag([:deploy_via], :desc => "One of 'copy' or 'scm'", :default_value => 'scm')
   c.flag([:copy_from_dir], :desc => "Source directory for copy operation", :default_value => Eh::Settings.current.releases_dir)
   c.flag([:tag], :desc => "The tag to deploy")
