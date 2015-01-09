@@ -10,13 +10,13 @@ class Deployer::Executor
     yield(self) if block_given?
   end
 
-
   def execute(command, options = {})
-    log_command("Execute: '#{command}'", options[:comment])
-    stage.hosts.each_with_index do |host, index|
+    log_command("Execute: '#{command.strip}'", options[:comment])
+    stage.hosts.each_with_index.map do |host, index|
       log_host(host, index)
       result = execute_on(host, command)
       log_result(result)
+      result
     end
 
   rescue => e
@@ -29,12 +29,12 @@ class Deployer::Executor
       log_host(host, index)
       result = upload_on(host, source, target)
       log_result(result)
+      result
     end
 
   rescue => e
     handle_exception(e, options)
   end
-
 
   private
   def handle_exception(e, options)
@@ -72,6 +72,7 @@ class Deployer::Executor
   def upload_on(host, source, target)
     execute_local "scp -P #{host[:port]} #{source} #{host[:user]}@#{host[:host]}:#{target}"
   end
+
 
   def execute_on(host, command)
     Net::SSH.start(host[:host], host[:user], port: host[:port]) do |ssh|

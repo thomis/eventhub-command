@@ -1,9 +1,65 @@
 class Deployer::RubyDeployer < Deployer::BaseDeployer
-  attr_reader :processor_name
+  attr_accessor :processor_names
 
-  def initialize(processor_name, options)
+  def initialize(processor_names, options)
     super(options)
-    @processor_name = processor_name
+    @processor_names = processor_names
+  end
+
+  def deploy!
+    puts "deploying to #{stage.name} for environment #{stage.node_env} via #{deploy_via}".light_blue.on_blue
+
+    Deployer::Executor.new(stage, verbose: verbose?) do |executor|
+      # create required directories
+      executor.execute("mkdir -p #{base_dir} ; mkdir -p #{logs_dir} ; mkdir -p #{File.join(deploy_dir, 'ruby')}")
+
+      update_cached_copy(executor)
+
+
+      # fetch processor_names unless they have been passed as an argument to the initializer
+      processor_names_to_deploy = resolve_processor_names(executor, options)
+      puts "Found #{processor_names_to_deploy} to deploy".light_blue.on_blue
+      processor_names_to_deploy.each do |processor_name|
+        puts
+        puts "Deploying #{processor_name}".light_blue.on_blue
+        log_deployment(executor, "Deploying #{processor_name} via #{deploy_via} from #{cached_copy_dir}")
+        # stop old one
+        executor.execute("kill -s TERM $(cat #{File.join(pids_dir, processor_name)}.pid)", abort_on_error: false, comment: "This is not sooo important")
+
+        # unzip package
+        target = File.join(deploy_dir, 'ruby')
+        source = "#{File.join(cached_copy_dir, 'ruby', processor_name)}.zip"
+        executor.execute("rm -rf #{processor_dir(processor_name)} && unzip -o -d #{target} #{source}")
+
+        # copy config
+        executor.execute("if [[ -d #{config_source_dir(processor_name)} ]] ; then cp -r #{config_source_dir(processor_name)}/* #{processor_dir(processor_name)}; fi")
+
+        # symlink log dir
+        executor.execute("ln -s #{logs_dir} #{File.join(processor_dir(processor_name), 'logs')}")
+
+        # symlink pids dir
+        executor.execute("ln -s #{pids_dir} #{File.join(processor_dir(processor_name), 'pids')}")
+
+        # install gems
+        executor.execute("cd #{processor_dir(processor_name)} && bundle install --without test")
+
+        # start new one
+        executor.execute("cd #{processor_dir(processor_name)} && bundle exec ruby #{processor_name}.rb -d --environment=#{stage.node_env}")
+      end
+    end
+  end
+
+  private
+
+  def update_cached_copy(executor)
+    if via_scp?
+      source = "#{Eh::Settings.current.releases_dir}/ruby/*.zip"
+      target_dir = File.join(cached_copy_dir, 'ruby')
+      executor.execute("rm -rf #{target_dir}/*.zip && mkdir -p #{target_dir}")
+      executor.upload(source, target_dir)
+    else
+      update_scm(executor)
+    end
   end
 
   def logs_dir
@@ -14,59 +70,72 @@ class Deployer::RubyDeployer < Deployer::BaseDeployer
     File.join(base_dir, 'shared', 'pids')
   end
 
-  def current_dir
-    File.join(base_dir, 'eh-current')
+  def deploy_dir
+    File.join(base_dir, 'eh-deploy')
   end
 
-  def processor_dir
-    File.join(current_dir, 'ruby', processor_name)
+  def processor_dir(processor_name)
+    File.join(deploy_dir, 'ruby', processor_name)
   end
 
-  def config_source_dir
+  def config_source_dir(processor_name)
     File.join(base_dir, 'config', 'ruby', processor_name)
   end
 
-  def deploy!
-    puts "deploying #{processor_name} to #{stage.name} for environment #{stage.node_env}"
-    puts "deploying via: #{deploy_via}"
-
-    Deployer::Executor.new(stage, verbose: verbose?) do |executor|
-      # create required directories
-      executor.execute("mkdir -p #{base_dir} ; mkdir -p #{logs_dir} ; mkdir -p #{File.join(current_dir, 'ruby')} ; mkdir -p #{File.join(cached_copy_dir, 'ruby')}")
-
-      if via_scp?
-        # upload pre-packaged processor via scp
-        source = "#{Eh::Settings.current.releases_dir}/ruby/#{processor_name}.zip"
-        target = File.join(cached_copy_dir, 'ruby', "#{processor_name}.zip")
-        executor.upload(source, target)
-      else
-        co_line = "svn co --trust-server-cert --non-interactive --username #{scm_username} --password #{scm_password} #{repository} #{cached_copy_dir}"
-        executor.execute(co_line)
-      end
-
-      # unzip package
-      source = File.join(current_dir, 'ruby')
-      target = "#{File.join(cached_copy_dir, 'ruby', processor_name)}.zip"
-      executor.execute("unzip -o -d #{source} #{target}")
-
-      # copy config
-      executor.execute("if [[ -d #{config_source_dir} ]] ; then cp -r #{config_source_dir}/* #{processor_dir}; fi")
-
-      # symlink log dir
-      executor.execute("ln -s #{logs_dir} #{File.join(processor_dir, 'logs')}")
-
-      # symlink pids dir
-      executor.execute("ln -s #{pids_dir} #{File.join(processor_dir, 'pids')}")
-
-      # install gems
-      executor.execute("cd #{processor_dir} && bundle install --without test")
-
-      # stop old one
-      executor.execute("kill -s TERM $(cat #{File.join(pids_dir, processor_name)}.pid)", abort_on_error: false, comment: "This is not sooo important")
-
-      # start new one
-      executor.execute("cd #{processor_dir} && bundle exec ruby #{processor_name}.rb -d --environment=#{stage.node_env}")
+  # Detect what processors to deploy
+  #
+  def resolve_processor_names(executor, options)
+    available = remote_ls(executor, options, File.join(cached_copy_dir, 'ruby', "*.zip")).map do |name|
+      File.basename(name, '.zip')
     end
+
+    fetched = processor_names.map do |name|
+      if name.include?('*') # resolve pattern on remote machine
+        remote_ls(executor, options, File.join(cached_copy_dir, 'ruby', "#{name}.zip"))
+      else
+        name
+      end
+    end
+    if fetched.empty? # then fetch all
+      fetched = available
+    end
+
+    fetched = fetched.flatten.map do |name|
+      File.basename(name, '.zip')
+    end
+
+    verify_requested_processers_exist!(fetched, available)
+
+    fetched
   end
 
+  def verify_requested_processers_exist!(requested, available)
+    # remove requested that are not available
+    puts "Deployment List".light_blue.on_blue
+    abort = false
+    requested.each do |name|
+      if available.include?(name)
+        puts "#{name}: AVAILABLE".green
+      else
+        abort = true
+        puts "#{name}: UNAVAILABLE".red
+      end
+    end
+    if abort
+      puts "Not all requested processors are available in #{cached_copy_dir}. Will abort.".red
+      raise
+    end
+
+  end
+
+  # Executes an ls on all hosts and returns the combined
+  # list of files or dirs.
+  def remote_ls(executor, options, pattern)
+    results = executor.execute("ls #{pattern}", options)
+    results.map do |result|
+      if result[:stdout]
+        result[:stdout].split("\n")
+      end
+    end.flatten.compact.uniq
+  end
 end
