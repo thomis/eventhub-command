@@ -22,16 +22,16 @@ class Eh::Settings
     File.expand_path(data['repository_root_dir'])
   end
 
-  def releases_dir
-    File.join(repository_root_dir, 'releases')
+  def releases_dir(*extra_paths)
+    File.join(repository_root_dir, 'releases', *extra_paths)
   end
 
   def rails_release_dir
-    File.join(releases_dir, 'rails')
+    releases_dir('rails')
   end
 
   def ruby_release_dir
-    File.join(releases_dir, 'ruby')
+    releases_dir('ruby')
   end
 
   def processors_src_dir

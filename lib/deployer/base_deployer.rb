@@ -34,8 +34,8 @@ class Deployer::BaseDeployer
     deploy_via == 'scp'
   end
 
-  def cached_copy_dir
-    if via_scp?
+  def cached_copy_dir(*extra_paths)
+    dir = if via_scp?
       File.join(base_dir, 'eh-cached-copy-scp')
     else
       if options[:tag]
@@ -46,6 +46,7 @@ class Deployer::BaseDeployer
         File.join(base_dir, 'eh-cached-copy-svn', 'branches', 'master', 'releases')
       end
     end
+    File.join(dir, *extra_paths)
   end
 
   def scm_username
@@ -76,6 +77,39 @@ class Deployer::BaseDeployer
       fi
     EOS
     executor.execute(cmd)
+  end
+
+  private
+
+
+  # Executes an ls on all hosts and returns the combined
+  # list of files or dirs.
+  def remote_ls(executor, options, pattern)
+    results = executor.execute("ls #{pattern}", options)
+    results.map do |result|
+      if result[:stdout]
+        result[:stdout].split("\n")
+      end
+    end.flatten.compact.uniq
+  end
+
+  def verify_deployment_list!(requested, available)
+    # remove requested that are not available
+    puts 'Deployment List'.light_blue.on_blue
+    abort = false
+    requested.each do |name|
+      if available.include?(name)
+        puts "#{name}: AVAILABLE".green
+      else
+        abort = true
+        puts "#{name}: UNAVAILABLE".red
+      end
+    end
+    if abort
+      puts 'Not all requested components are available in #{cached_copy_dir}. Will abort.'.red
+      raise
+    end
+
   end
 
 end
