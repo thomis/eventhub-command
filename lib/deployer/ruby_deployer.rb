@@ -10,8 +10,8 @@ class Deployer::RubyDeployer < Deployer::BaseDeployer
     puts "deploying to #{stage.name} for environment #{stage.node_env} via #{deploy_via}".light_blue.on_blue
 
     Deployer::Executor.new(stage, verbose: verbose?) do |executor|
-      # create required directories
-      executor.execute("mkdir -p #{base_dir} ; mkdir -p #{logs_dir} ; mkdir -p #{deploy_dir('ruby')}")
+      create_base_dirs(executor)
+
 
       update_cached_copy(executor)
 
@@ -70,7 +70,7 @@ class Deployer::RubyDeployer < Deployer::BaseDeployer
   end
 
   def deploy_dir(*extra_paths)
-    File.join(base_dir, 'eh-deploy', *extra_paths)
+    File.join(base_dir, *extra_paths)
   end
 
   def processor_dir(*extra_paths)
@@ -78,7 +78,7 @@ class Deployer::RubyDeployer < Deployer::BaseDeployer
   end
 
   def config_source_dir(processor_name)
-    File.join(base_dir, 'config', 'ruby', processor_name)
+    super('ruby', processor_name)
   end
 
   # Detect what processors to deploy

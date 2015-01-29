@@ -2,6 +2,7 @@ class Deployer::BaseDeployer
   attr_reader :options, :stage_path, :stage
 
   def initialize(options)
+    puts options
     @options = options
 
     @stage_path = File.join(Eh::Settings.current.stages_dir, "#{options[:stage]}.yml")
@@ -9,6 +10,10 @@ class Deployer::BaseDeployer
   end
 
   private
+
+  def config_source_dir(*extra_paths)
+    File.join(base_dir, 'config', *extra_paths)
+  end
 
   def log_deployment(executor, message)
     executor.execute("echo $(date): #{message} - #{ENV['USER']} >> #{deploy_log_file}")
@@ -19,7 +24,7 @@ class Deployer::BaseDeployer
   end
 
   def deploy_log_file
-    File.join(base_dir, 'deploy.log')
+    File.join(base_dir, 'shared', 'logs', 'deploy.log')
   end
 
   def deploy_via
@@ -36,14 +41,14 @@ class Deployer::BaseDeployer
 
   def cached_copy_dir(*extra_paths)
     dir = if via_scp?
-      File.join(base_dir, 'eh-cached-copy-scp')
+      File.join(base_dir, 'shared', 'cached-copy-scp')
     else
       if options[:tag]
-        File.join(base_dir, 'eh-cached-copy-svn', 'tags', options[:tag], 'releases')
+        File.join(base_dir, 'shared', 'cached-copy-svn', 'tags', options[:tag], 'releases')
       elsif options[:branch]
-        File.join(base_dir, 'eh-cached-copy-svn', 'branches', options[:branch], 'releases')
+        File.join(base_dir, 'shared', 'cached-copy-svn', 'branches', options[:branch], 'releases')
       else
-        File.join(base_dir, 'eh-cached-copy-svn', 'branches', 'master', 'releases')
+        File.join(base_dir, 'shared', 'cached-copy-svn', 'branches', 'master', 'releases')
       end
     end
     File.join(dir, *extra_paths)
@@ -65,8 +70,25 @@ class Deployer::BaseDeployer
     "#{scm_base_url}/branches/master/releases"
   end
 
+
+  def create_base_dirs(executor)
+    dirs = [
+      File.join(base_dir, 'config'),
+      File.join(base_dir, 'ruby'),
+      File.join(base_dir, 'mule'),
+      File.join(base_dir, 'rails'),
+      File.join(base_dir, 'shared'),
+      File.join(base_dir, 'shared', 'pids'),
+      File.join(base_dir, 'shared', 'logs'),
+      File.join(base_dir, 'shared', 'cached-copy-scp')
+    ]
+    cmds = dirs.map do |dir|
+      "mkdir -p #{dir}"
+    end
+    executor.execute(cmds.join(" && "))
+  end
   def update_scm(executor)
-    dir = File.join(base_dir, 'eh-cached-copy-svn')
+    dir = File.join(base_dir, 'shared/cached-copy-svn')
     cmd = <<-EOS
       if [[ -d #{dir} ]]
       then

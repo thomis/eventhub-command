@@ -10,17 +10,32 @@ class Deployer::Executor
     yield(self) if block_given?
   end
 
+  # execute a command on all hosts of a stage
+  # commands are expanded with :hostname, :port and :stagename
   def execute(command, options = {})
     log_command("Execute: '#{command.strip}'", options[:comment])
     stage.hosts.each_with_index.map do |host, index|
+      expand_options = {hostname: host[:host], stagename: stage.name, port: host[:port]}
+
+      expanded_command = command % expand_options
+      if expanded_command != command
+        log_command("Expanded command to #{expanded_command}")
+      end
       log_host(host, index)
-      result = execute_on(host, command)
+      result = execute_on(host, expanded_command)
       log_result(result)
       result
     end
 
   rescue => e
     handle_exception(e, options)
+  end
+
+
+  def execute_on(host, command)
+    Net::SSH.start(host[:host], host[:user], port: host[:port]) do |ssh|
+      ssh.exec_sc!(command)
+    end
   end
 
   def upload(source, target, options = {})
@@ -74,11 +89,6 @@ class Deployer::Executor
   end
 
 
-  def execute_on(host, command)
-    Net::SSH.start(host[:host], host[:user], port: host[:port]) do |ssh|
-      ssh.exec_sc!(command)
-    end
-  end
 
   def execute_local(command)
     output = nil

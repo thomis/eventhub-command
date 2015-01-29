@@ -11,15 +11,14 @@ class Deployer::MuleDeployer < Deployer::BaseDeployer
   end
 
   def config_source_dir(adapter_name)
-    File.join(base_dir, 'config', 'mule', adapter_name)
+    super('mule', adapter_name)
   end
 
   def deploy!
     puts "deploying to #{stage.name} for environment #{stage.node_env} via #{deploy_via}".light_blue.on_blue
 
     Deployer::Executor.new(stage, verbose: verbose?) do |executor|
-      # create required directories
-      executor.execute("mkdir -p #{base_dir}")
+      create_base_dirs(executor)
 
       # update
       update_cached_copy(executor)
@@ -30,10 +29,14 @@ class Deployer::MuleDeployer < Deployer::BaseDeployer
         puts
         puts "Deploying #{adapter_name}".light_blue.on_blue
         log_deployment(executor, "Deploying #{adapter_name} via #{deploy_via} from #{cached_copy_dir}")
+        # make a copy of the zip files to merge them with config
+        cached_copy_source = adapter_cached_copy(adapter_name)
+        configuration_target = File.join(base_dir, 'mule', "#{adapter_name}.zip")
+        executor.execute("cp #{cached_copy_source} #{configuration_target}")
 
         # copy config
-        source = config_source_dir(adapter_name)
-        executor.execute("if [[ -d #{source} ]] ; then cd #{source} ; zip -r #{adapter_cached_copy(adapter_name)} . ; fi")
+        config_source = config_source_dir(adapter_name)
+        executor.execute("if [[ -d #{config_source} ]] ; then cd #{config_source} ; zip -r #{configuration_target} . ; fi")
 
         # deploy
         executor.execute("cp #{adapter_cached_copy(adapter_name)} $MULE_HOME/apps")

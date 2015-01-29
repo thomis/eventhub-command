@@ -1,5 +1,5 @@
 desc 'deploy a single channel adapter'
-arg_name 'channel_adapter'
+arg_name '[channel_adapter[,other_channel_adapter,pattern*]]'
 
 command :deploy_mule do |c|
   c.flag([:stage], desc: 'stage', type: String, long_desc: 'Stage where channel adapter is deployed to', default_value: 'localhost')

@@ -67,6 +67,6 @@ class Eh::Settings
   end
 
   def stages_dir
-    File.expand_path("~/.eh-stages")
+    File.join(repository_root_dir, 'config', 'stages')
   end
 end
