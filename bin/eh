@@ -14,14 +14,10 @@ if File.readable?(config_file)
   settings = Eh::Settings.load(config_file)
   Eh::Settings.current = settings
 else
-  puts "Config file missing: ~/.eh, will create it now..."
-  puts "Please specify the Eventhub SVN root directory (i.e. the directory which contains the 'src', 'release', ... directories"
-  input = STDIN.gets.chomp
-  data = {'repository_root_dir' => input}
   File.open(config_file, 'w') do |file|
-    file.write(JSON.dump(data))
+    file.write(JSON.dump({}))
   end
-  puts "Config file written to #{config_file}. Please try again."
+  puts "Created empty config file. Please run 'eh repository add'"
   exit
 end
 

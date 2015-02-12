@@ -7,7 +7,7 @@ class Deployer::RubyDeployer < Deployer::BaseDeployer
   end
 
   def deploy!
-    puts "deploying to #{stage.name} for environment #{stage.node_env} via #{deploy_via}".light_blue.on_blue
+    puts "deploying to #{stage.name} via #{deploy_via}".light_blue.on_blue
 
     Deployer::Executor.new(stage, verbose: verbose?) do |executor|
       create_base_dirs(executor)
@@ -43,7 +43,7 @@ class Deployer::RubyDeployer < Deployer::BaseDeployer
         executor.execute("cd #{processor_dir(processor_name)} && bundle install --without test")
 
         # start new one
-        executor.execute("cd #{processor_dir(processor_name)} && bundle exec ruby #{processor_name}.rb -d --environment=#{stage.node_env}")
+        executor.execute("cd #{processor_dir(processor_name)} && bundle exec ruby #{processor_name}.rb -d -e $EH_ENV")
       end
     end
   end

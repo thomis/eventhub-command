@@ -19,12 +19,17 @@ $ rbenv rehash
 First time running the command
 ~~~ sh
 $ eh
-Config file missing: ~/.eh, will create it now...
-Please specify the Eventhub SVN root directory (i.e. the directory which contains the 'src', 'release', ... directories
-/Users/username/dev/event_hub
-Config file written to /Users/username/.eh. Please try again.
+Created empty config file. Please run 'eh repository add'
 $
 ~~~
+
+Run again:
+~~~ sh
+$ eh repository add http://something.com/project/svn /Users/foo/eventhub/branches/master username password
+$
+~~~
+
+NOTE: username and password you specify here are from the deploy user.
 
 ### Stages
 
@@ -36,11 +41,10 @@ Content looks like this:
 
 ~~~
 localhost:
-  node_env: development
   hosts:
     - host: localhost
       port: 2222
-      user: s_cme
+      user: some_user
 ~~~
 
 

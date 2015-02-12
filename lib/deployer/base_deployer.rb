@@ -2,7 +2,6 @@ class Deployer::BaseDeployer
   attr_reader :options, :stage_path, :stage
 
   def initialize(options)
-    puts options
     @options = options
 
     @stage_path = File.join(Eh::Settings.current.stages_dir, "#{options[:stage]}.yml")

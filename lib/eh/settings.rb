@@ -1,9 +1,46 @@
 class Eh::Settings
-  attr_reader :data
+
+  attr_reader :data, :file
+
+  class Repository
+    def initialize(json)
+      @json = json
+    end
+
+    def url
+      @json['url']
+    end
+
+    def deploy_username
+      @json['deploy_username']
+    end
+
+    def deploy_password
+      @json['deploy_password']
+    end
+
+    def dir
+      @json['dir']
+    end
+
+    def current?
+      @json['current']
+    end
+  end
+
+  def initialize(file)
+    @file = file
+    @data = JSON.parse(File.read(file))
+  end
+
   def self.load(file)
-    data = File.read(file)
-    json = JSON.parse(data)
-    Eh::Settings.new(json)
+    Eh::Settings.new(file)
+  end
+
+  def write
+    File.open(file,"w") do |f|
+      f.write(data.to_json)
+    end
   end
 
   def self.current=(value)
@@ -14,16 +51,20 @@ class Eh::Settings
     Thread.current[:eh_settings]
   end
 
-  def initialize(data)
-    @data = data
+  def repository
+    repositories.find do |repository|
+      repository.current?
+    end if repositories
   end
 
-  def repository_root_dir
-    File.expand_path(data['repository_root_dir'])
+  def repositories
+    data["repositories"].map do |json|
+      Eh::Settings::Repository.new(json)
+    end if data["repositories"]
   end
 
   def releases_dir(*extra_paths)
-    File.join(repository_root_dir, 'releases', *extra_paths)
+    File.join(repository.dir, 'releases', *extra_paths)
   end
 
   def rails_release_dir
@@ -35,19 +76,19 @@ class Eh::Settings
   end
 
   def processors_src_dir
-    File.join(repository_root_dir, 'src', 'ruby')
+    File.join(repository.dir, 'src', 'ruby')
   end
 
   def deployment_dir
-    File.join(repository_root_dir, 'src', 'deployment')
+    File.join(repository.dir, 'src', 'deployment')
   end
 
   def rails_src_dir
-    File.join(repository_root_dir, 'src', 'rails', 'console')
+    File.join(repository.dir, 'src', 'rails', 'console')
   end
 
   def source_config_dir
-    File.join(repository_root_dir, 'config')
+    File.join(repository.dir, 'config')
   end
 
   def processor_template_repository_url
@@ -67,6 +108,6 @@ class Eh::Settings
   end
 
   def stages_dir
-    File.join(repository_root_dir, 'config', 'stages')
+    File.join(repository.dir, 'config', 'stages')
   end
 end

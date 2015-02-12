@@ -1,9 +1,8 @@
 class Deployer::Stage
-  attr_reader :name, :node_env, :hosts
+  attr_reader :name, :hosts
 
-  def initialize(name, node_env)
+  def initialize(name)
     @name = name
-    @node_env = node_env
     @hosts = []
   end
 
@@ -18,7 +17,7 @@ class Deployer::Stage
   def self.load(file)
     data = YAML.load_file(file)
     data.map do |name, config|
-      stage = Deployer::Stage.new(name, config['node_env'])
+      stage = Deployer::Stage.new(name)
       config['hosts'].each do |host|
         stage.host(host['host'], host['port'], host['user'])
       end

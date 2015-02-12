@@ -5,7 +5,7 @@ class Deployer::ConfigDeployer < Deployer::BaseDeployer
   end
 
   def deploy!
-    puts "deploying to #{stage.name} for environment #{stage.node_env} via #{deploy_via}".light_blue.on_blue
+    puts "deploying to #{stage.name} via #{deploy_via}".light_blue.on_blue
     Deployer::Executor.new(stage, verbose: verbose?) do |executor|
       create_base_dirs(executor)
       update_scm(executor)
