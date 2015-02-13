@@ -54,15 +54,15 @@ class Deployer::BaseDeployer
   end
 
   def scm_username
-    'deploy'
+    Eh::Settings.current.repository.deploy_username
   end
 
   def scm_password
-    'deploy2014!'
+    Eh::Settings.current.repository.deploy_password
   end
 
   def scm_base_url
-    "https://whistler.plan.io/svn/eventhub"
+    Eh::Settings.current.repository.url
   end
 
   def repository
