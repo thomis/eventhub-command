@@ -23,7 +23,7 @@ class Deployer::BaseDeployer
   end
 
   def deploy_log_file
-    File.join(base_dir, 'shared', 'logs', 'deploy.log')
+    File.join(shared_dir, 'logs', 'deploy.log')
   end
 
   def deploy_via
@@ -38,16 +38,28 @@ class Deployer::BaseDeployer
     deploy_via == 'scp'
   end
 
+  def shared_dir
+    File.join(base_dir, 'shared')
+  end
+
+  def cached_copy_scp_dir
+    File.join(shared_dir, 'cached_copy_scp')
+  end
+
+  def cached_copy_svn_dir
+    File.join(shared_dir, 'cached_copy_svn')
+  end
+
   def cached_copy_dir(*extra_paths)
     dir = if via_scp?
-      File.join(base_dir, 'shared', 'cached-copy-scp')
+      cached_copy_scp_dir
     else
       if options[:tag]
-        File.join(base_dir, 'shared', 'cached-copy-svn', 'tags', options[:tag], 'releases')
+        File.join(cached_copy_svn_dir, 'tags', options[:tag], 'releases')
       elsif options[:branch]
-        File.join(base_dir, 'shared', 'cached-copy-svn', 'branches', options[:branch], 'releases')
+        File.join(cached_copy_svn_dir, 'branches', options[:branch], 'releases')
       else
-        File.join(base_dir, 'shared', 'cached-copy-svn', 'branches', 'master', 'releases')
+        File.join(cached_copy_svn_dir, 'branches', 'master', 'releases')
       end
     end
     File.join(dir, *extra_paths)
@@ -76,18 +88,19 @@ class Deployer::BaseDeployer
       File.join(base_dir, 'ruby'),
       File.join(base_dir, 'mule'),
       File.join(base_dir, 'rails'),
-      File.join(base_dir, 'shared'),
-      File.join(base_dir, 'shared', 'pids'),
-      File.join(base_dir, 'shared', 'logs'),
-      File.join(base_dir, 'shared', 'cached-copy-scp')
+      shared_dir,
+      File.join(shared_dir, 'pids'),
+      File.join(shared_dir, 'logs'),
+      cached_copy_scp_dir
     ]
     cmds = dirs.map do |dir|
       "mkdir -p #{dir}"
     end
     executor.execute(cmds.join(" && "))
   end
+
   def update_scm(executor)
-    dir = File.join(base_dir, 'shared/cached-copy-svn')
+    dir = cached_copy_svn_dir
     cmd = <<-EOS
       if [[ -d #{dir} ]]
       then

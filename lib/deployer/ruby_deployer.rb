@@ -62,11 +62,11 @@ class Deployer::RubyDeployer < Deployer::BaseDeployer
   end
 
   def logs_dir
-    File.join(base_dir, 'shared', 'logs')
+    File.join(shared_dir, 'logs')
   end
 
   def pids_dir
-    File.join(base_dir, 'shared', 'pids')
+    File.join(shared_dir, 'pids')
   end
 
   def deploy_dir(*extra_paths)
