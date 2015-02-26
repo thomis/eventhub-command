@@ -10,7 +10,8 @@ else
   # remove unused settings for this version
   Eh::Settings.current.data.delete('repository_root_dir')
   Eh::Settings.current.write
-  puts "No current repository defined. Please run 'eh repository add' and/or 'eh repository select'"
+  puts "No current repository found."
+  puts "You can configure other repositories by running 'eh repository add' and/or 'eh repository select'"
 end
 
 require 'eh/commands/repository'

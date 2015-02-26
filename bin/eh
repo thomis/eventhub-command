@@ -17,7 +17,7 @@ else
   File.open(config_file, 'w') do |file|
     file.write(JSON.dump({}))
   end
-  puts "Created empty config file. Please run 'eh repository add'"
+  puts "No config File found. Created empty config file for you. You can run 'eh repository add/select' to manage repositories"
   exit
 end
 
