@@ -5,7 +5,7 @@ class Deployer::BaseDeployer
     @options = options
 
     @stage_path = File.join(Eh::Settings.current.stages_dir, "#{options[:stage]}.yml")
-    @stage = Deployer::Stage.load(stage_path)
+    @stage = Deployer::Stage.load(options[:stage], stage_path)
   end
 
   private

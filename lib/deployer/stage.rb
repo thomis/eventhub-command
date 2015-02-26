@@ -14,9 +14,9 @@ class Deployer::Stage
     }
   end
 
-  def self.load(file)
+  def self.load(name, file)
     data = YAML.load_file(file)
-    data.map do |name, config|
+    data.map do |_, config|
       stage = Deployer::Stage.new(name)
       config['hosts'].each do |host|
         stage.host(host['host'], host['port'], host['user'])
