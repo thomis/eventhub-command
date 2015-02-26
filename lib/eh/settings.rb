@@ -58,9 +58,10 @@ class Eh::Settings
   end
 
   def repositories
-    data["repositories"].map do |json|
+    repos = data["repositories"].map do |json|
       Eh::Settings::Repository.new(json)
     end if data["repositories"]
+    repos || []
   end
 
   def releases_dir(*extra_paths)

@@ -4,6 +4,7 @@ command :repository do |command|
   command.desc "Lists all avaiable repositories"
   command.command :list do |command|
     command.action do |global_options,options,args|
+
       Eh::Settings.current.repositories.each_with_index do |repository, index|
         if repository.current?
           puts "#{index + 1}: #{repository.url} (current)"
@@ -24,10 +25,10 @@ command :repository do |command|
         raise "Need exactly 1 arguments: index"
       end
       selected = args[0].to_i
-      puts "Will select #{args[0]}"
       Eh::Settings.current.data['repositories'].each_with_index do |repository, index|
         repository['current'] = (index + 1) == selected
       end
+      puts "Selected #{Eh::Settings.current.repository.url}"
       Eh::Settings.current.write
     end
   end
@@ -39,6 +40,15 @@ command :repository do |command|
         raise "Need exactly 4 arguments: URL, DIR, USERNAME, PASSWORD"
       end
       Eh::Settings.current.data['repositories'] ||= []
+
+      # check if same repo already exists
+      exists = Eh::Settings.current.data['repositories'].any? do |repository|
+        repository['url'] == args[0]
+      end
+      if exists
+        raise "Already configured repository for '#{args[0]}'"
+      end
+
       Eh::Settings.current.data['repositories'] << {
         'url' => args[0],
         'dir' => args[1],
