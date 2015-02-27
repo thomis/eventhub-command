@@ -39,7 +39,7 @@ class Deployer::MuleDeployer < Deployer::BaseDeployer
         executor.execute("if [[ -d #{config_source} ]] ; then cd #{config_source} ; zip -r #{configuration_target} . ; fi")
 
         # deploy
-        executor.execute("cp #{adapter_cached_copy(adapter_name)} $MULE_HOME/apps")
+        executor.execute("cp #{configuration_target} $MULE_HOME/apps")
       end
     end
   end
