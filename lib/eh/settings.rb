@@ -81,6 +81,10 @@ class Eh::Settings
     File.join(repository.dir, 'src', 'ruby')
   end
 
+  def rails_src_dir
+    File.join(repository.dir, 'src', 'rails')
+  end
+
   def console_source_dir
     File.join(repository.dir, 'src', 'rails', 'console')
   end

@@ -31,7 +31,7 @@ command :dump do |command|
       cmds = []
       cmds << "mkdir -p #{dir}"
       cmds << "cd #{dir} && pg_dump -Uevent_hub_console event_hub_console > console_pg.sql"
-      cmds << "if [[ -d #{logstash_source} ]] ; then cp #{logstash_source} #{File.join(dir, 'logstash_output.log')} ; fi"
+      cmds << "if [[ -f #{logstash_source} ]] ; then cp #{logstash_source} #{File.join(dir, 'logstash_output.log')} ; fi"
       cmds << "cd #{dir} && zip -r #{zip_target} ."
       cmds << "rm -rf #{dir}"
 
