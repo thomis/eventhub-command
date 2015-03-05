@@ -34,7 +34,7 @@ class Deployer::Executor
 
   def execute_on(host, command)
     Net::SSH.start(host[:host], host[:user], port: host[:port]) do |ssh|
-      ssh.exec_sc!(command)
+      ssh.exec_sc!(command, verbose?)
     end
   end
 

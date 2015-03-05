@@ -12,6 +12,15 @@ class Deployer::Stage
       port: port,
       user: user
     }
+    self
+  end
+
+  # returns a new stage which only contains one host
+  #
+  def single_host_stage
+    stage = Deployer::Stage.new(name)
+    stage.host(hosts[0][:host], hosts[0][:port], hosts[0][:user])
+    stage
   end
 
   def self.load(name, file)

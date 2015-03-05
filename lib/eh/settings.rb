@@ -68,6 +68,7 @@ class Eh::Settings
     File.join(repository.dir, 'releases', *extra_paths)
   end
 
+
   def rails_release_dir
     releases_dir('rails')
   end
@@ -78,6 +79,10 @@ class Eh::Settings
 
   def processors_src_dir
     File.join(repository.dir, 'src', 'ruby')
+  end
+
+  def console_source_dir
+    File.join(repository.dir, 'src', 'rails', 'console')
   end
 
   def deployment_dir

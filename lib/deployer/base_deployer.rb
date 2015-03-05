@@ -19,7 +19,7 @@ class Deployer::BaseDeployer
   end
 
   def base_dir
-    "/apps/compoundbank/s_cme/apps/event_hub"
+    "~/apps/event_hub"
   end
 
   def deploy_log_file
@@ -140,7 +140,7 @@ class Deployer::BaseDeployer
       end
     end
     if abort
-      puts 'Not all requested components are available in #{cached_copy_dir}. Will abort.'.red
+      puts "Not all requested components are available in #{cached_copy_dir}. Will abort.".red
       raise
     end
 

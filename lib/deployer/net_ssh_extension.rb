@@ -1,6 +1,6 @@
 class Net::SSH::Connection::Session
 
-  def exec_sc!(command)
+  def exec_sc!(command, verbose = false)
     stdout_data,stderr_data = "",""
     exit_code, exit_signal = nil,nil
     self.open_channel do |channel|
@@ -8,10 +8,18 @@ class Net::SSH::Connection::Session
         raise "Command \"#{command}\" was unable to execute" unless success
 
         channel.on_data do |_, data|
+          if verbose
+            puts
+            puts data.light_blue.on_white if verbose
+          end
           stdout_data += data
         end
 
         channel.on_extended_data do |_, _, data|
+          if verbose
+            puts
+            puts data.light_blue.on_white if verbose
+          end
           stderr_data += data
         end
 
