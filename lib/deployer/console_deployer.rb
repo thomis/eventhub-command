@@ -35,8 +35,7 @@ class Deployer::ConsoleDeployer < Deployer::BaseDeployer
   end
 
   def execute_in_clean_env(cmd)
-    puts "-" * 300
-    puts "Will #{cmd}"
+    puts "Will run #{cmd} on your local machine"
     Bundler.with_clean_env do
       system cmd
     end
