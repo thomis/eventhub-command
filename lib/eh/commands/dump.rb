@@ -2,7 +2,7 @@ desc "manage repositories"
 
 command :dump do |command|
   command.desc "Create a backup"
-  command.flag([:stage], desc: 'stage', type: String, long_desc: 'Stage where processor is deployed to', default_value: 'development')
+  command.flag([:stage], desc: 'stage', type: String, long_desc: 'Stage where processor is deployed to', default_value: Eh::Settings.current.default_stage)
   command.switch([:v, :verbose], :desc => 'Show additional output.')
 
   command.command :download do |command|

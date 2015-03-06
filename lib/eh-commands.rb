@@ -3,7 +3,7 @@ if Eh::Settings.current.repository
   require 'eh/commands/generate_processor'
   require 'eh/commands/package_ruby'
   require 'eh/commands/package_rails'
-  require 'eh/commands/list_stages'
+  require 'eh/commands/stage'
   require 'eh/commands/deploy_config'
   require 'eh/commands/deploy_ruby'
   require 'eh/commands/deploy_mule'

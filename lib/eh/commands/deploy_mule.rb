@@ -2,7 +2,7 @@ desc 'deploy a single channel adapter'
 arg_name '[channel_adapter[,other_channel_adapter,pattern*]]'
 
 command :deploy_mule do |c|
-  c.flag([:stage], desc: 'stage', type: String, long_desc: 'Stage where channel adapter is deployed to', default_value: 'development')
+  c.flag([:stage], desc: 'stage', type: String, long_desc: 'Stage where channel adapter is deployed to', default_value: Eh::Settings.current.default_stage)
   c.flag([:deploy_via], desc: 'how to get hold of the channel adapter: scm or scp', type: String, long_desc: 'copy the channel adapter zip file via scp from this machine or check it out from scm', default_value: 'svn')
 
   c.switch([:v, :verbose], :desc => 'Show additional output.')

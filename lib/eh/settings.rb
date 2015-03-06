@@ -28,6 +28,10 @@ class Eh::Settings
     end
   end
 
+  def default_stage
+    @data['default_stage'] || 'development'
+  end
+
   def initialize(file)
     @file = file
     @data = JSON.parse(File.read(file))
