@@ -19,6 +19,7 @@ command :stage do |command|
       stage = args[0]
       Eh::Settings.current.data['default_stage'] = stage
       Eh::Settings.current.write
+      puts "Set stage default to '#{stage}'"
     end
   end
 end
