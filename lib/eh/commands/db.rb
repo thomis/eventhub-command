@@ -17,6 +17,7 @@ command :db do |command|
         puts "will execute '#{cmd}'"
       end
       system cmd
+      puts "Dumped DB to #{target}"
     end
   end
 
@@ -31,11 +32,17 @@ command :db do |command|
       if source.nil?
         raise ArgumentError.new("No source file found in #{base} and none passed via --file")
       end
-      cmd = "psql -U#{options[:user]} -d#{options[:db]} -f#{source}"
-      if options[:verbose]
-        puts "will execute '#{cmd}'"
+      puts "This will destroy the contents of #{options[:db]}. Is this OK? [yes/NO]:"
+      answer = $stdin.gets.chomp.downcase
+      if answer == 'yes'
+        cmd = "psql -U#{options[:user]} -d#{options[:db]} -f#{source}"
+        if options[:verbose]
+          puts "will execute '#{cmd}'"
+        end
+        system cmd
+      else
+        puts "Abort."
       end
-      system cmd
     end
   end
 
