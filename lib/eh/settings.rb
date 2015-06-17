@@ -118,10 +118,14 @@ class Eh::Settings
   end
 
   def deployment_management_files
-    [ File.join(deployment_dir, 'management', 'launcher.rb') ]
+    [File.join(deployment_dir, 'management', 'launcher.rb')]
   end
 
   def stages_dir
     File.join(repository.dir, 'config', 'stages')
+  end
+
+  def db_backups_dir
+    File.expand_path('~/backups')
   end
 end

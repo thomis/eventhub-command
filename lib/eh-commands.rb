@@ -9,6 +9,7 @@ if Eh::Settings.current.repository
   require 'eh/commands/deploy_mule'
   require 'eh/commands/deploy_console'
   require 'eh/commands/dump'
+  require 'eh/commands/db'
 else
   # remove unused settings for this version
   Eh::Settings.current.data.delete('repository_root_dir')
