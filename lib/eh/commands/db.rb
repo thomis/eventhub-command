@@ -10,9 +10,9 @@ command :db do |command|
     c.action do |global_options, options, args|
       base = Eh::Settings.current.db_backups_dir
       stamp = Time.now.strftime('%Y%m%d%H%M%S')
-      target = options[:file] || "#{stamp}-console-dump.sql"
+      target = options[:file] || "#{stamp}-console-dump.sql.compressed"
 
-      cmd = "mkdir -p #{base} && cd #{base} && pg_dump -U#{options[:user]} #{options[:db]} -f#{target}"
+      cmd = "mkdir -p #{base} && cd #{base} && pg_dump -Fc -U#{options[:user]} #{options[:db]} -f#{target}"
       if options[:verbose]
         puts "will execute '#{cmd}'"
       end
@@ -32,10 +32,10 @@ command :db do |command|
       if source.nil?
         raise ArgumentError.new("No source file found in #{base} and none passed via --file")
       end
-      puts "This will destroy the contents of #{options[:db]}. Is this OK? [yes/NO]:"
+      puts "This can destroy the contents of #{options[:db]}. Is this OK? [yes/NO]:"
       answer = $stdin.gets.chomp.downcase
       if answer == 'yes'
-        cmd = "psql -U#{options[:user]} -d#{options[:db]} -f#{source}"
+        cmd = "pg_restore -Fc -U #{options[:user]} -d #{options[:db]} #{source}"
         if options[:verbose]
           puts "will execute '#{cmd}'"
         end
@@ -47,7 +47,7 @@ command :db do |command|
   end
 
   command.command :cleanup_dumps do |c|
-    c.flag([:keep], type: Integer, desc: "How many dumps to keep", default_value: 5)
+    c.flag([:keep], type: Integer, desc: "How many dumps to keep", default_value: 25)
     c.action do |global_options, options, args|
       keep = options[:keep]
       base = Eh::Settings.current.db_backups_dir
