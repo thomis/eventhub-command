@@ -1,7 +1,7 @@
-desc 'Packages processors to zip files'
+desc 'Packages processors to zip files. '
+arg_name '[processor_name,[other_processor_name,pattern*]]'
 command :package_ruby do |c|
   c.flag([:x, :exclude], :desc => "Exclude processors by name.", :type => Array, :long_desc => "You can specify multiple processors by providing a comma-separated list.")
-  c.flag([:p, :processors], :desc => "Specify what processors to package", :type => Array, :long_desc => "You can specify multiple processors by providing a comma-separated list.")
   c.flag([:d, :destination], :desc => "Destination directory to place created zip files.", :default_value => Eh::Settings.current.ruby_release_dir)
   c.flag([:s, :source], :desc => "Source directory to read processors from.", :default_value => Eh::Settings.current.processors_src_dir)
 
@@ -22,10 +22,20 @@ command :package_ruby do |c|
 
     included_processor_names = processor_names
 
-    # only include processors specified by -p option, if option is given
-    if options['p']
+    # if processor names are given as arguments then use them.
+    # can contain wildcards like "console.*" to include all processors
+    # starting with "console.".
+    if args[0]
+      processor_names_from_arguments = args[0].split(',').map(&:strip)
+
       included_processor_names = included_processor_names.select do |processor_name|
-        options['p'].include?(processor_name)
+        processor_names_from_arguments.any? do |query|
+          if query.end_with?('*')
+            processor_name.start_with?(query.gsub('*', ''))
+          else
+            processor_name == query
+          end
+        end
       end
     end
 
@@ -41,7 +51,6 @@ command :package_ruby do |c|
     if included_processor_names.empty?
       raise "There are no processor names. Either your -s directory is empty or you specified a strange combination of -x and -p"
     end
-
 
     # make sure destination directory exists
     FileUtils.mkdir_p(destination_dir)
