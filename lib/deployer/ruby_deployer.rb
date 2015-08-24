@@ -33,6 +33,9 @@ class Deployer::RubyDeployer < Deployer::BaseDeployer
         # copy config
         executor.execute("if [[ -d #{config_source_dir(processor_name)} ]] ; then cp -r #{config_source_dir(processor_name)}/* #{processor_dir(processor_name)}; fi")
 
+        # remove log dir if it exists
+        executor.execute("if [[ -d #{processor_dir(processor_name, 'logs')} ]] ; then rm -rf #{processor_dir(processor_name, 'logs')}; fi")
+
         # symlink log dir
         executor.execute("ln -s #{logs_dir} #{processor_dir(processor_name, 'logs')}")
 
