@@ -70,7 +70,6 @@ Some common options are:
 * --verbose (enable verbose output)
 
 ### Commands
-* deploy_console: deploy the ruby on rails app 'console'
 * deploy_ruby: deploy a ruby processor to a stage. You can specify:
   * a processor name
   * multiple processor names spearated via commas

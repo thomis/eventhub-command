@@ -7,7 +7,6 @@ if Eh::Settings.current.repository
   require 'eh/commands/deploy_config'
   require 'eh/commands/deploy_ruby'
   require 'eh/commands/deploy_mule'
-  require 'eh/commands/deploy_console'
   require 'eh/commands/dump'
   require 'eh/commands/db'
 else
