@@ -31,15 +31,27 @@ class Deployer::Executor
     handle_exception(e, options)
   end
 
-
   def execute_on(host, command)
     Net::SSH.start(host[:host], host[:user], port: host[:port]) do |ssh|
       ssh.exec_sc!(command, verbose?)
     end
   end
 
+  def download(source, target, options = {})
+    log_command("Execute: download via scp #{source} from #{target}", options[:comment])
+    stage.hosts.each_with_index do |host, index|
+      log_host(host, index)
+      result = download_from(host, source, target)
+      log_result(result)
+      result
+    end
+
+  rescue => e
+    handle_exception(e, options)
+  end
+
   def upload(source, target, options = {})
-    log_command("Execute: scp #{source} to #{target}", options[:comment])
+    log_command("Execute: upload via scp #{source} to #{target}", options[:comment])
     stage.hosts.each_with_index do |host, index|
       log_host(host, index)
       result = upload_on(host, source, target)
@@ -88,6 +100,11 @@ class Deployer::Executor
     execute_local "scp -P #{host[:port]} #{source} #{host[:user]}@#{host[:host]}:#{target}"
   end
 
+  def download_from(host, source, target)
+    execute_local "scp -P #{host[:port]} #{host[:user]}@#{host[:host]}:#{source} #{target}"
+  end
+
+
 
 
   def execute_local(command)
@@ -109,5 +126,4 @@ class Deployer::Executor
 
     result
   end
-
 end

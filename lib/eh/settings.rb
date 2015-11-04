@@ -28,6 +28,19 @@ class Eh::Settings
     end
   end
 
+  class Proxy
+    def initialize(json)
+      @name = json['name']
+      @current = json['current']
+      @url = json['url']
+    end
+    attr_reader :name, :url, :current
+
+    def current?
+      !!@current
+    end
+  end
+
   def default_stage
     @data['default_stage'] || 'development'
   end
@@ -35,6 +48,7 @@ class Eh::Settings
   def initialize(file)
     @file = file
     @data = JSON.parse(File.read(file))
+    @data['proxies'] ||= []
   end
 
   def self.load(file)
@@ -66,6 +80,14 @@ class Eh::Settings
       Eh::Settings::Repository.new(json)
     end if data["repositories"]
     repos || []
+  end
+
+
+  def proxies
+    proxies = data['proxies'].map do |json|
+      Eh::Settings::Proxy.new(json)
+    end if data['proxies']
+    proxies || []
   end
 
   def releases_dir(*extra_paths)
