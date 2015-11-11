@@ -1,5 +1,5 @@
-module Eh::ProxySettings
-  class Git
+module Eh::Proxy::Settings
+  class Shell
     def initialize(stage, verbose = true)
       @stage = stage
       @verbose = verbose
@@ -8,6 +8,7 @@ module Eh::ProxySettings
     def set(value)
       Deployer::Executor.new(stage, verbose: verbose?) do |executor|
         executor.execute(set_command(value), abort_on_error: false)
+
       end
     end
 
@@ -20,6 +21,10 @@ module Eh::ProxySettings
 
     private
 
+    def proxy_file
+      '~/.proxy'
+    end
+
     def verbose?
       @verbose
     end
@@ -27,11 +32,15 @@ module Eh::ProxySettings
     attr_reader :stage
 
     def unset_command
-      "git config --global --unset http.proxy ; git config --global --unset https.proxy"
+      "rm -f #{proxy_file} ; touch #{proxy_file}"
     end
 
     def set_command(value)
-      "git config --global http.proxy http://#{value} ; git config --global https.proxy https://#{value}"
+      "echo '#{set_content(value)}' > #{proxy_file}"
+    end
+
+    def set_content(value)
+      "export http_proxy=#{value}\nexport https_proxy=#{value}"
     end
   end
 end

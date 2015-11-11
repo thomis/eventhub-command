@@ -1,6 +1,6 @@
 require 'tempfile'
 require 'parseconfig'
-module Eh::ProxySettings
+module Eh::Proxy::Settings
 
   class Svn
     def initialize(stage, verbose = true)

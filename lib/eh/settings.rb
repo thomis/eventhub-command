@@ -39,6 +39,12 @@ class Eh::Settings
     def current?
       !!@current
     end
+
+    def label
+      label = "#{name} -> #{url}"
+      label << " (current)" if current?
+      label
+    end
   end
 
   def default_stage
