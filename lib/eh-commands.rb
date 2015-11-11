@@ -10,6 +10,7 @@ if Eh::Settings.current.repository
   require 'eh/commands/dump'
   require 'eh/commands/db'
   require 'eh/commands/proxy'
+  require 'eh/commands/deploy'
   require 'eh/proxy/proxy'
 else
   # remove unused settings for this version
