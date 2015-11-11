@@ -1,5 +1,6 @@
 module Eh
   module Proxy
+    require 'uri'
     require_relative 'settings/git'
     require_relative 'settings/svn'
     require_relative 'settings/shell'
