@@ -31,18 +31,18 @@ class Eh::Settings
   class Proxy
     def initialize(json)
       @name = json['name']
-      @current = json['current']
+      @default = json['default']
       @url = json['url']
     end
-    attr_reader :name, :url, :current
+    attr_reader :name, :url, :default
 
-    def current?
-      !!@current
+    def default?
+      !!@default
     end
 
     def label
       label = "#{name} -> #{url}"
-      label << " (current)" if current?
+      label << " (default)" if default?
       label
     end
   end

@@ -11,7 +11,7 @@ module Eh
       end
 
       def set(name = nil)
-        proxy = find_proxy_by_name(name) || find_current_proxy
+        proxy = find_proxy_by_name(name) || find_default_proxy
         if proxy.nil?
           raise "No proxy found"
         end
@@ -47,7 +47,7 @@ module Eh
         Eh::Settings.current.data['proxies'] << {
           'url' => url,
           'name' => name,
-          'current' => (Eh::Settings.current.proxies.length == 0)
+          'default' => (Eh::Settings.current.proxies.length == 0)
         }
         Eh::Settings.current.write
       end
@@ -59,7 +59,7 @@ module Eh
         end
 
         Eh::Settings.current.data['proxies'].each do |json|
-          json['current'] = (json['name'] == name)
+          json['default'] = (json['name'] == name)
         end
         Eh::Settings.current.write
       end
@@ -89,13 +89,10 @@ module Eh
         Eh::Settings.current.proxies.find { |proxy| proxy.url == url }
       end
 
-      def find_current_proxy
-        Eh::Settings.current.proxies.find { |proxy| proxy.current }
+      def find_default_proxy
+        Eh::Settings.current.proxies.find { |proxy| proxy.default }
       end
 
-      # def find_proxies
-      #   Eh::Settings.current.proxies
-      # end
     end
   end
 end

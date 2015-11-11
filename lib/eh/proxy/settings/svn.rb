@@ -18,7 +18,7 @@ module Eh::Proxy::Settings
         config['global'].delete('http-proxy-username')
         config['global'].delete('http-proxy-password')
         File.open(temporary_config_file, 'w') do |file|
-          config.write(file)
+          config.write(file, false)
         end
         executor.upload(temporary_config_file, "~/.subversion/servers")
       end
@@ -34,7 +34,7 @@ module Eh::Proxy::Settings
         config['global']['http-proxy-host'] = uri.host
         config['global']['http-proxy-port'] = uri.port
         File.open(temporary_config_file, 'w') do |file|
-          config.write(file)
+          config.write(file, false)
         end
         executor.upload(temporary_config_file, "~/.subversion/servers")
       end
