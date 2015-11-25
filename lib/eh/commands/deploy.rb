@@ -39,17 +39,13 @@ command :deploy do |c|
     c.arg_name '[channel_adapter[,other_channel_adapter,pattern*]]'
 
     c.action do |global_options, options, args|
-      begin
-        if args[0]
-          adapter_names = args[0].split(',').map(&:strip)
-        else
-          adapter_names = nil
-        end
-        Deployer::MuleDeployer.new(adapter_names, options).deploy!
-      rescue => e
-        puts e.message
-        puts e.backtrace.join("\n")
+
+      if args[0]
+        adapter_names = args[0].split(',').map(&:strip)
+      else
+        adapter_names = nil
       end
+      Deployer::MuleDeployer.new(adapter_names, options).deploy!
     end
   end
 
@@ -58,17 +54,12 @@ command :deploy do |c|
     c.arg_name '[processor_name,[other_processor_name,pattern*]]'
 
     c.action do |global_options, options, args|
-      begin
-        if args[0]
-          processor_names = args[0].split(',').map(&:strip)
-        else
-          processor_names = nil
-        end
-        Deployer::RubyDeployer.new(processor_names, options).deploy!
-      rescue => e
-        puts e.message
-        puts e.backtrace.join("\n")
+      if args[0]
+        processor_names = args[0].split(',').map(&:strip)
+      else
+        processor_names = nil
       end
+      Deployer::RubyDeployer.new(processor_names, options).deploy!
     end
   end
 
@@ -105,7 +96,7 @@ command :deploy do |c|
   end
 
   def extend_command(command)
-    "bundle exec eh #{command}"
+    "eh #{command}"
   end
 
 end
