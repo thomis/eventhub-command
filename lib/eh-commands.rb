@@ -1,6 +1,6 @@
 # All commands are required here
 if Eh::Settings.current.repository
-  require 'eh/commands/generate_processor'
+  require 'eh/commands/generate'
   require 'eh/commands/package_ruby'
   require 'eh/commands/package_rails'
   require 'eh/commands/stage'
