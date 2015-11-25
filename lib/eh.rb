@@ -9,3 +9,4 @@ require 'eh/settings'
 require 'yaml'
 
 require_relative 'deployer'
+require_relative 'packager'

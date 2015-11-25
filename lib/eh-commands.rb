@@ -1,13 +1,12 @@
 # All commands are required here
 if Eh::Settings.current.repository
   require 'eh/commands/generate_processor'
-  require 'eh/commands/package_ruby'
-  require 'eh/commands/package_rails'
   require 'eh/commands/stage'
   require 'eh/commands/dump'
   require 'eh/commands/db'
   require 'eh/commands/proxy'
   require 'eh/commands/deploy'
+  require 'eh/commands/package'
   require 'eh/proxy/proxy'
 else
   # remove unused settings for this version
