@@ -109,8 +109,16 @@ class Eh::Settings
     releases_dir('ruby')
   end
 
-  def processors_src_dir
+  def go_release_dir
+    releases_dir('go')
+  end
+
+  def ruby_processors_src_dir
     File.join(repository.dir, 'src', 'ruby')
+  end
+
+  def go_processors_src_dir
+    File.join(repository.dir, 'src', 'go', 'src', 'github.com', 'cme-eventhub')
   end
 
   def rails_src_dir

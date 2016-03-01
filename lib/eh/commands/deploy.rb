@@ -6,8 +6,8 @@ command :deploy do |c|
   c.switch([:v, :verbose], :desc => 'Show additional output.')
   c.flag([:deploy_via], desc: 'where to deploy from', type: String, long_desc: 'deploy via scm or scp. If you use scp then the working_dir is packaged and copied tot the servers', default_value: 'svn')
 
+  c.desc 'deploy all'
   c.command :all do |c|
-    c.desc 'deploy all'
     c.action do |global_options, options, arguments|
       forward_arguments = arguments.join(' ')
       deploy_config(options, forward_arguments)
@@ -17,14 +17,14 @@ command :deploy do |c|
     end
   end
 
+  c.desc 'distribute the configs to the nodes'
   c.command :config do |c|
-    c.desc 'distribute the configs to the nodes'
     c.action do |global_options, options, args|
       Deployer::ConfigDeployer.new(options).deploy!
     end
   end
 
-  desc 'deploy the rails console app'
+  c.desc 'deploy the rails console app'
   c.command :console do |c|
     c.flag([:working_dir], desc: 'directory to execute commands in', type: String, default_value: '.')
 
@@ -33,13 +33,10 @@ command :deploy do |c|
     end
   end
 
-
+  c.desc 'deploy a single channel adapter'
+  c.arg_name '[channel_adapter[,other_channel_adapter,pattern*]]'
   c.command :mule do |c|
-    c.desc 'deploy a single channel adapter'
-    c.arg_name '[channel_adapter[,other_channel_adapter,pattern*]]'
-
     c.action do |global_options, options, args|
-
       if args[0]
         adapter_names = args[0].split(',').map(&:strip)
       else
@@ -49,10 +46,9 @@ command :deploy do |c|
     end
   end
 
+  c.desc 'deploy a single ruby processor'
+  c.arg_name '[processor_name,[other_processor_name,pattern*]]'
   c.command :ruby do |c|
-    c.desc 'deploy a single ruby processor'
-    c.arg_name '[processor_name,[other_processor_name,pattern*]]'
-
     c.action do |global_options, options, args|
       if args[0]
         processor_names = args[0].split(',').map(&:strip)
@@ -63,7 +59,18 @@ command :deploy do |c|
     end
   end
 
-
+  c.desc 'deploy a single go processor'
+  c.arg_name '[processor_name,[other_processor_name,pattern*]]'
+  c.command :go do |go|
+    go.action do |global_options, options, args|
+      if args[0]
+        processor_names = args[0].split(',').map(&:strip)
+      else
+        processor_names = nil
+      end
+      Deployer::GoDeployer.new(processor_names, options).deploy!
+    end
+  end
 
   private
 
