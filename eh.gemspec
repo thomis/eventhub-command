@@ -26,6 +26,6 @@ spec = Gem::Specification.new do |s|
   s.add_runtime_dependency('activesupport', '~> 4.1')
   s.add_runtime_dependency('net-ssh', '~> 2.9')
   s.add_runtime_dependency('colorize', '~> 0.7')
-  s.add_runtime_dependency('highline')
-  s.add_runtime_dependency('parseconfig')
+  s.add_runtime_dependency('highline', '~> 1.7')
+  s.add_runtime_dependency('parseconfig', '~> 1.0')
 end
