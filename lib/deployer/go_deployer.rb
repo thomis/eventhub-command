@@ -24,7 +24,12 @@ class Deployer::GoDeployer < Deployer::BaseDeployer
         log_deployment(executor, "Deploying #{processor_name} via #{deploy_via} from #{cached_copy_dir}")
 
         # stop old one
-        executor.execute("kill -s TERM $(cat #{File.join(pids_dir, processor_name)}.pid)", abort_on_error: false, comment: "This is not sooo important")
+        if inspector?
+          cmd = inspector_command('stop', processor_name)
+          executor.execute(cmd, abort_on_error: false, comment: "Request to stop component")
+        else
+          executor.execute("kill -s TERM $(cat #{File.join(pids_dir, processor_name)}.pid)", abort_on_error: false, comment: "This is not sooo important")
+        end
 
         # unzip package
         target = deploy_dir('go')
@@ -44,7 +49,12 @@ class Deployer::GoDeployer < Deployer::BaseDeployer
         executor.execute("ln -s #{pids_dir} #{processor_dir(processor_name, 'pids')}")
 
         # start new one
-        executor.execute("cd #{processor_dir(processor_name)} && ./#{processor_name} -d -e $EH_ENV")
+        if inspector?
+          cmd = inspector_command('start', processor_name)
+          executor.execute(cmd, abort_on_error: false, comment: "Request to start component")
+        else
+          executor.execute("cd #{processor_dir(processor_name)} && ./#{processor_name} -d -e $EH_ENV")
+        end
       end
     end
   end

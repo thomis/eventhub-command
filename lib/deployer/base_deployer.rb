@@ -34,6 +34,10 @@ class Deployer::BaseDeployer
     options[:verbose]
   end
 
+  def inspector?
+    options[:inspector]
+  end
+
   def via_scp?
     deploy_via == 'scp'
   end
@@ -144,6 +148,10 @@ class Deployer::BaseDeployer
       raise
     end
 
+  end
+
+  def inspector_command(action, name)
+    "curl -X POST --data '[{\"name\": \"#{name}\",\"action\": \"#{action}\"}]' --header \"Content-Type:application/json\" http://localhost:5500/applications"
   end
 
 end

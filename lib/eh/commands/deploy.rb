@@ -5,6 +5,7 @@ command :deploy do |c|
   c.flag([:tag], desc: 'tag', type: String, long_desc: 'What tag to deploy. Only when deploy_via=scm', default_value: nil)
   c.switch([:v, :verbose], :desc => 'Show additional output.')
   c.flag([:deploy_via], desc: 'where to deploy from', type: String, long_desc: 'deploy via scm or scp. If you use scp then the working_dir is packaged and copied tot the servers', default_value: 'svn')
+  c.switch([:i, :inspector], desc: 'start/stop via inspector')
 
   c.desc 'deploy all'
   c.command :all do |c|
