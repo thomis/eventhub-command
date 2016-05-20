@@ -12,6 +12,7 @@ command :deploy do |c|
     c.action do |global_options, options, arguments|
       forward_arguments = arguments.join(' ')
       deploy_config(options, forward_arguments)
+      deploy_go(options, forward_arguments)
       deploy_ruby(options, forward_arguments)
       deploy_mule(options, forward_arguments)
       deploy_console(options, forward_arguments)
@@ -77,6 +78,10 @@ command :deploy do |c|
 
   def deploy_ruby(options, forward_arguments)
     system "#{extend_command('deploy ruby')} #{copy_options(options, :stage, :branch, :tag, :verbose)} #{forward_arguments}"
+  end
+
+  def deploy_go(options, forward_arguments)
+    system "#{extend_command('deploy go')} #{copy_options(options, :stage, :branch, :tag, :verbose)} #{forward_arguments}"
   end
 
   def deploy_console(options, forward_arguments)

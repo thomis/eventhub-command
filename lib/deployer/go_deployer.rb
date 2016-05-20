@@ -24,7 +24,7 @@ class Deployer::GoDeployer < Deployer::BaseDeployer
         log_deployment(executor, "Deploying #{processor_name} via #{deploy_via} from #{cached_copy_dir}")
 
         # stop old one
-        if inspector?
+        if inspector? && processor_name != 'inspector'
           cmd = inspector_command('stop', processor_name)
           executor.execute(cmd, abort_on_error: false, comment: "Request to stop component")
         else
@@ -49,7 +49,7 @@ class Deployer::GoDeployer < Deployer::BaseDeployer
         executor.execute("ln -s #{pids_dir} #{processor_dir(processor_name, 'pids')}")
 
         # start new one
-        if inspector?
+        if inspector? && processor_name != 'inspector'
           cmd = inspector_command('start', processor_name)
           executor.execute(cmd, abort_on_error: false, comment: "Request to start component")
         else
