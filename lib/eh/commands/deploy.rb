@@ -89,7 +89,7 @@ command :deploy do |c|
   end
 
   def deploy_mule(options, forward_arguments)
-    system "#{extend_command(:deploy_mule)} #{copy_options(options, :stage, :verbose)} #{forward_arguments}"
+    system "#{extend_command('deploy mule')} #{copy_options(options, :stage, :verbose)} #{forward_arguments}"
   end
 
   def deploy_config(options, forward_arguments)
