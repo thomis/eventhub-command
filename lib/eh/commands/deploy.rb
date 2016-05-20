@@ -77,11 +77,11 @@ command :deploy do |c|
   private
 
   def deploy_ruby(options, forward_arguments)
-    system "#{extend_command('deploy ruby')} #{copy_options(options, :stage, :branch, :tag, :verbose)} #{forward_arguments}"
+    system "#{extend_command('deploy ruby')} #{'-i' if options['i']} #{copy_options(options, :stage, :branch, :tag, :verbose)} #{forward_arguments}"
   end
 
   def deploy_go(options, forward_arguments)
-    system "#{extend_command('deploy go')} #{copy_options(options, :stage, :branch, :tag, :verbose)} #{forward_arguments}"
+    system "#{extend_command('deploy go')} #{'-i' if options['i']} #{copy_options(options, :stage, :branch, :tag, :verbose)} #{forward_arguments}"
   end
 
   def deploy_console(options, forward_arguments)
