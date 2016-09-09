@@ -5,7 +5,6 @@ command :deploy do |c|
   c.flag([:tag], desc: 'tag', type: String, long_desc: 'What tag to deploy. Only when deploy_via=scm', default_value: nil)
   c.switch([:v, :verbose], :desc => 'Show additional output.')
   c.flag([:deploy_via], desc: 'where to deploy from', type: String, long_desc: 'deploy via scm or scp. If you use scp then the working_dir is packaged and copied tot the servers', default_value: 'svn')
-  c.switch([:i, :inspector], desc: 'start/stop via inspector')
 
   c.desc 'deploy all'
   c.command :all do |c|
@@ -77,11 +76,11 @@ command :deploy do |c|
   private
 
   def deploy_ruby(options, forward_arguments)
-    system "#{extend_command('deploy ruby')} #{'-i' if options['i']} #{copy_options(options, :stage, :branch, :tag, :verbose)} #{forward_arguments}"
+    system "#{extend_command('deploy ruby')} #{copy_options(options, :stage, :branch, :tag, :verbose)} #{forward_arguments}"
   end
 
   def deploy_go(options, forward_arguments)
-    system "#{extend_command('deploy go')} #{'-i' if options['i']} #{copy_options(options, :stage, :branch, :tag, :verbose)} #{forward_arguments}"
+    system "#{extend_command('deploy go')} #{copy_options(options, :stage, :branch, :tag, :verbose)} #{forward_arguments}"
   end
 
   def deploy_console(options, forward_arguments)

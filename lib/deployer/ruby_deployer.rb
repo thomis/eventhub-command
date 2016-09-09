@@ -24,12 +24,8 @@ class Deployer::RubyDeployer < Deployer::BaseDeployer
         log_deployment(executor, "Deploying #{processor_name} via #{deploy_via} from #{cached_copy_dir}")
 
         # stop old one
-        if inspector?
-          cmd = inspector_command('stop', processor_name)
-          executor.execute(cmd, abort_on_error: false, comment: "Request to stop component")
-        else
-          executor.execute("kill -s TERM $(cat #{File.join(pids_dir, processor_name)}.pid)", abort_on_error: false, comment: "This is not sooo important")
-        end
+        cmd = inspector_command('stop', processor_name)
+        executor.execute(cmd, abort_on_error: false, comment: "Request to stop component")
 
         # unzip package
         target = deploy_dir('ruby')
@@ -52,12 +48,8 @@ class Deployer::RubyDeployer < Deployer::BaseDeployer
         executor.execute("cd #{processor_dir(processor_name)} && bundle install --without test")
 
         # start new one
-        if inspector?
-          cmd = inspector_command('start', processor_name)
-          executor.execute(cmd, abort_on_error: false, comment: "Request to stop component")
-        else
-          executor.execute("cd #{processor_dir(processor_name)} && bundle exec ruby #{processor_name}.rb -d -e $EH_ENV")
-        end
+        cmd = inspector_command('start', processor_name)
+        executor.execute(cmd, abort_on_error: false, comment: "Request to stop component")
       end
     end
   end
