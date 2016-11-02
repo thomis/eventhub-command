@@ -1,8 +1,4 @@
 -- -------------------------------------
--- to do
+-- Feature Requests
 -- -------------------------------------
-
-- eh relase -r or --repository plate_store or http path -u user -p password
-- folder filter, default and customize
-- extension filter, default and customize
-- it could take config settings from a local .ehconfig file
+- update configuration without re-deploy

@@ -15,16 +15,15 @@ class Deployer::GoDeployer < Deployer::BaseDeployer
 
       update_cached_copy(executor)
 
-
       # fetch processor_names unless they have been passed as an argument to the initializer
       processor_names_to_deploy = resolve_processor_names(executor, options)
-      processor_names_to_deploy.each do |processor_name|
+      processor_names_to_deploy.sort(& go_sorter).each do |processor_name|
         puts
         puts "Deploying #{processor_name}".light_blue.on_blue
         log_deployment(executor, "Deploying #{processor_name} via #{deploy_via} from #{cached_copy_dir}")
 
         # stop old one
-        if inspector? && processor_name != 'inspector'
+        if processor_name != 'inspector'
           cmd = inspector_command('stop', processor_name)
           executor.execute(cmd, abort_on_error: false, comment: "Request to stop component")
         else
@@ -49,11 +48,13 @@ class Deployer::GoDeployer < Deployer::BaseDeployer
         executor.execute("ln -s #{pids_dir} #{processor_dir(processor_name, 'pids')}")
 
         # start new one
-        if inspector? && processor_name != 'inspector'
+        if processor_name == 'inspector'
+          # default start
+          executor.execute("cd #{processor_dir(processor_name)} && ./#{processor_name} -d -e $EH_ENV")
+        else
+          # startig go via inspector
           cmd = inspector_command('start', processor_name)
           executor.execute(cmd, abort_on_error: false, comment: "Request to start component")
-        else
-          executor.execute("cd #{processor_dir(processor_name)} && ./#{processor_name} -d -e $EH_ENV")
         end
       end
     end
@@ -117,6 +118,16 @@ class Deployer::GoDeployer < Deployer::BaseDeployer
     verify_deployment_list!(fetched, available)
 
     fetched
+  end
+
+  # custom go sorting makes sure inspector is always first if multiple go apps are given
+  #
+  def go_sorter
+    ->(a, b) do
+      return -1 if a =~ /inspector/i
+      return 1 if b =~ /inspector/i
+      a <=> b
+    end
   end
 
 end

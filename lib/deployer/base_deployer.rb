@@ -34,10 +34,6 @@ class Deployer::BaseDeployer
     options[:verbose]
   end
 
-  def inspector?
-    options[:inspector]
-  end
-
   def via_scp?
     deploy_via == 'scp'
   end
