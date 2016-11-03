@@ -11,10 +11,10 @@ command :deploy do |c|
     c.action do |global_options, options, arguments|
       forward_arguments = arguments.join(' ')
       deploy_config(options, forward_arguments)
+      deploy_console(options, forward_arguments)
       deploy_go(options, forward_arguments)
       deploy_ruby(options, forward_arguments)
       deploy_mule(options, forward_arguments)
-      deploy_console(options, forward_arguments)
     end
   end
 

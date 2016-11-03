@@ -18,7 +18,7 @@ class Deployer::RubyDeployer < Deployer::BaseDeployer
 
       # fetch processor_names unless they have been passed as an argument to the initializer
       processor_names_to_deploy = resolve_processor_names(executor, options)
-      processor_names_to_deploy.each do |processor_name|
+      processor_names_to_deploy.sort(& ruby_sorter).each do |processor_name|
         puts
         puts "Deploying #{processor_name}".light_blue.on_blue
         log_deployment(executor, "Deploying #{processor_name} via #{deploy_via} from #{cached_copy_dir}")
@@ -112,6 +112,17 @@ class Deployer::RubyDeployer < Deployer::BaseDeployer
     verify_deployment_list!(fetched, available)
 
     fetched
+  end
+
+
+  # custom ruby sorting makes sure dispatcher is always first if multiple go apps are given
+  #
+  def ruby_sorter
+    ->(a, b) do
+      return -1 if a =~ /disaptcher/i
+      return 1 if b =~ /dispatcher/i
+      a <=> b
+    end
   end
 
 end
