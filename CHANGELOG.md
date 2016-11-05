@@ -1,3 +1,10 @@
+## 0.6.8 (2016-11-05)
+
+Fix
+
+- Typo fixes ruby/dispatcher sorting
+
+
 ## 0.6.7 (2016-11-03)
 
 Features:

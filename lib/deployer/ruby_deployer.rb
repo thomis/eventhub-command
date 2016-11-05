@@ -119,7 +119,7 @@ class Deployer::RubyDeployer < Deployer::BaseDeployer
   #
   def ruby_sorter
     ->(a, b) do
-      return -1 if a =~ /disaptcher/i
+      return -1 if a =~ /dispatcher/i
       return 1 if b =~ /dispatcher/i
       a <=> b
     end
