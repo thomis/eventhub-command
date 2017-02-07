@@ -1,3 +1,5 @@
+[![Dependency Status](https://gemnasium.com/badges/github.com/thomis/eventhub-command.svg)](https://gemnasium.com/github.com/thomis/eventhub-command)
+
 eventhub-command
 ================
 
