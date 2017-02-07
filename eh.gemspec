@@ -17,8 +17,8 @@ spec = Gem::Specification.new do |s|
   s.executables             = ['eh']
   s.required_ruby_version   = '>= 1.9.3'
 
-  s.add_development_dependency('rake', '~> 10.1')
-  s.add_development_dependency('rdoc', '~> 4.1')
+  s.add_development_dependency('rake', '~> 12.0')
+  s.add_development_dependency('rdoc', '~> 5.0')
   s.add_development_dependency('aruba', '~> 0.5')
 
   s.add_runtime_dependency('gli','2.12.0')
