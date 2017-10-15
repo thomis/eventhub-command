@@ -14,6 +14,17 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
+
+  # create a eh command config file unless there is an existing one
+  config.before(:suite) do
+    config_file = File.join(Dir.home,'.eh')
+    unless File.exist?(config_file)
+      File.open(config_file, 'w+') do |f|
+        f.write('{"proxies":[],"repositories":[{"url":"https://repo.com","dir":"eventhub","deploy_username":"a_user","deploy_password":"a_password","current":true}]}')
+      end
+    end
+  end
+
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
