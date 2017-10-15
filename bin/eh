@@ -24,6 +24,8 @@ end
 
 require 'eh-commands'
 
+subcommand_option_handling :normal
+
 # Use argument validation
 arguments :strict
 

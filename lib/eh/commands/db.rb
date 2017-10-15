@@ -1,4 +1,4 @@
-desc 'dump and restore db. Attention: those commands run on the local machine, not remote.'
+desc 'dump and restore Eventhub database. Attention: those commands run on the local machine, not remote.'
 command :db do |command|
 
   command.switch([:v, :verbose], :desc => 'Show additional output.')

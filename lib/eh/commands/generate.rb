@@ -1,4 +1,4 @@
-desc 'Generates a template for a processor'
+desc 'generate template for a new processor'
 arg_name 'module_name processor_name'
 command :generate do |c|
   c.command :processor do |c|
