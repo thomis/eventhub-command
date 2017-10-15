@@ -21,7 +21,6 @@ spec = Gem::Specification.new do |s|
 
   s.add_development_dependency('rake', '~> 12.0')
   s.add_development_dependency('rdoc', '~> 5.0')
-  s.add_development_dependency('aruba', '~> 0.14.2')
   s.add_development_dependency("rspec", "~> 3.6")
 
   s.add_runtime_dependency('gli','2.16.1')
