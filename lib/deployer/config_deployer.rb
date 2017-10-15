@@ -15,15 +15,6 @@ class Deployer::ConfigDeployer < Deployer::BaseDeployer
 
       cmd = "rsync -r --exclude=.svn #{source} #{target}"
       executor.execute(cmd)
-      # stage.hosts.each do |host|
-      #   hostname = host[:host]
-      #   source = cached_copy_dir('..', 'config', stage.name, hostname, '')
-      #   target = config_source_dir
-
-      #   # we use rsync to copy without .svn folders
-      #   cmd = "mkdir -p #{target} && rsync -r --exclude=.svn #{source} #{target}"
-      #   executor.execute_on(host, cmd)
-      # end
     end
   end
 end

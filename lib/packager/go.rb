@@ -14,7 +14,6 @@ class Packager::Go
     assert_at_least_one_processor!
     validate_platforms!
     create_destination_dir
-    #copy_deployment_management_files
     build_processors
     package_processors
   end
@@ -83,12 +82,6 @@ class Packager::Go
 
   def destination_file_name(processor_name)
     File.join(destination_dir, "#{processor_name}.zip")
-  end
-
-  def copy_deployment_management_files
-    Eh::Settings.current.deployment_management_files.each do |file|
-      FileUtils.cp(file, destination_dir)
-    end
   end
 
   def assert_at_least_one_processor!

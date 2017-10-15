@@ -42,19 +42,3 @@ class Packager::Rails
     FileUtils.rm destination_file_name(dir), force: true
   end
 end
-
-
-# files_and_dirs =
-# source = options[:source]
-#
-# dirs = Dir.glob("#{source}")
-# dirs.each do |dir|
-#   app = File.basename(dir)
-#   destination = File.join(options[:d], "#{app}.zip")
-#   included = files_and_dirs.map do |s|
-#     File.join(app, s)
-#   end.join(' ')
-#   cmd = "cd #{File.join(dir, '..')} && zip -r #{destination} #{included}"
-#   ret = system cmd
-#   puts "Packaged #{app}: #{ret}"
-# end
