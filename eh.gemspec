@@ -1,3 +1,5 @@
+require 'date'
+
 # Ensure we require the local version and not one we might have installed already
 require File.join([File.dirname(__FILE__),'lib','eh','version.rb'])
 spec = Gem::Specification.new do |s|
@@ -19,13 +21,14 @@ spec = Gem::Specification.new do |s|
 
   s.add_development_dependency('rake', '~> 12.0')
   s.add_development_dependency('rdoc', '~> 5.0')
-  s.add_development_dependency('aruba', '~> 0.5')
+  s.add_development_dependency('aruba', '~> 0.14.2')
+  s.add_development_dependency("rspec", "~> 3.6")
 
-  s.add_runtime_dependency('gli','2.12.0')
-  s.add_runtime_dependency('rubyzip', '~> 1.0')
-  s.add_runtime_dependency('activesupport', '~> 5.0')
-  s.add_runtime_dependency('net-ssh', '~> 4.0')
-  s.add_runtime_dependency('colorize', '~> 0.7')
-  s.add_runtime_dependency('highline', '~> 1.7')
-  s.add_runtime_dependency('parseconfig', '~> 1.0')
+  s.add_runtime_dependency('gli','2.16.1')
+  s.add_runtime_dependency('rubyzip', '~> 1.2.1')
+  s.add_runtime_dependency('activesupport', '~> 5.1.4')
+  s.add_runtime_dependency('net-ssh', '~> 4.2.0')
+  s.add_runtime_dependency('colorize', '~> 0.8.1')
+  s.add_runtime_dependency('highline', '~> 1.7.8')
+  s.add_runtime_dependency('parseconfig', '~> 1.0.8')
 end
