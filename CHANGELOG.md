@@ -1,3 +1,11 @@
+## 0.7.0 (2017-10-24)
+
+* Fix: Generate ruby pocessor
+* Edit: Harmonized subcommands
+* Edit: Colorized output
+* Edit: Newest GLI gem version
+* New: More rspecs
+
 ## 0.6.8 (2016-11-05)
 
 Fix

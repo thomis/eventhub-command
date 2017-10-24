@@ -8,5 +8,6 @@ require 'eh/version'
 require 'eh/settings'
 require 'yaml'
 
+require_relative 'helper'
 require_relative 'deployer'
 require_relative 'packager'

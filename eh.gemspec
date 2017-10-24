@@ -21,12 +21,10 @@ spec = Gem::Specification.new do |s|
 
   s.add_development_dependency "bundler", "~> 1.15.4"
   s.add_development_dependency('rake', '~> 12.0')
-  #s.add_development_dependency('rdoc', '~> 5.0')
-  s.add_development_dependency("rspec", "~> 3.6")
+  s.add_development_dependency("rspec", "~> 3.7")
 
   s.add_runtime_dependency('gli','2.17.0')
   s.add_runtime_dependency('rubyzip', '~> 1.2.1')
-  #s.add_runtime_dependency('activesupport', '~> 5.0.0')  # as long as we support ruby 2.1.5
   s.add_runtime_dependency('net-ssh', '~> 4.2.0')
   s.add_runtime_dependency('colorize', '~> 0.8.1')
   s.add_runtime_dependency('highline', '~> 1.7.8')
