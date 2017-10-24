@@ -57,7 +57,7 @@ RSpec.describe Eh do
       ['proxy add', 'Add new proxy by NAME and PROXY_URL'],
       ['proxy remove', 'Remove by NAME'],
 
-      ['dump', 'Creating a dump from an eventhub environment with database, logfiles, folders'],
+      ['dump', 'Creating a dump from an eventhub environment'],
       ['dump download', 'Download dumped database'],
       ['dump create', 'Create dump file from database'],
 
