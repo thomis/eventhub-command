@@ -1,3 +1,8 @@
+## 0.7.1 (2017-10-24)
+
+* Add: Support for windows backslashes
+* Edit: More colorized output
+
 ## 0.7.0 (2017-10-24)
 
 * Fix: Generate ruby pocessor

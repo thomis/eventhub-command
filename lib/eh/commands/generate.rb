@@ -56,7 +56,7 @@ command :generate do |c|
 
       FileUtils.rm_rf template_tmp_dir
 
-      puts "Done."
+      puts "Done.".green
     end
   end
 
