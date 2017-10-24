@@ -50,11 +50,11 @@ The file name is the name of the stage, the content describes environments, host
 Help and description for the commands can be obtained through:
 
 ~~~
-eh --help
+eh help
 ~~~
 and more specific for a single command
 ~~~
-eh <COMMAND> --help
+eh help <COMMAND> [<SUBCOMMAND>]
 ~~~
 
 
