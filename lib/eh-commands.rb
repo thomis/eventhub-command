@@ -1,12 +1,12 @@
 # All commands are required here
 if Eh::Settings.current.repository
   require 'eh/commands/generate'
-  require 'eh/commands/stage'
-  require 'eh/commands/dump'
-  require 'eh/commands/db'
-  require 'eh/commands/proxy'
-  require 'eh/commands/deploy'
   require 'eh/commands/package'
+  require 'eh/commands/deploy'
+  require 'eh/commands/stage'
+  require 'eh/commands/proxy'
+  require 'eh/commands/dump'
+  require 'eh/commands/database'
   require 'eh/proxy/proxy'
 else
   # remove unused settings for this version

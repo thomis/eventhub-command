@@ -5,8 +5,10 @@ require 'json'
 require 'eh' # eh needs to be required in advance so we can access Eh::Settings
 require 'bundler'
 include GLI::App
+require 'helper'
 
 program_desc 'Command line tools for EventHub'
+sort_help :manually
 
 version Eh::VERSION
 config_file = File.expand_path(File.join('~', '.eh'))
@@ -17,21 +19,15 @@ else
   File.open(config_file, 'w') do |file|
     file.write(JSON.dump({}))
   end
-  puts "No config File found. Created empty config file for you. You can run 'eh repository add/select' to manage repositories"
-  exit
+  raise "No config File found. Created empty config file for you. You can run 'eh repository add/select' to manage repositories"
 end
 
-
 require 'eh-commands'
-
-subcommand_option_handling :normal
-
-# Use argument validation
-arguments :strict
 
 accept Array do |value|
   value.split(/,/).map(&:strip)
 end
 
-switch([:v, :verbose], :desc => "Show additional output.")
+switch([:v, :verbose], :desc => "Show verbose output")
+
 exit run(ARGV)

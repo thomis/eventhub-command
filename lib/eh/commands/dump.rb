@@ -1,10 +1,10 @@
-desc "manage repositories"
+desc "Creating a dump from an eventhub environment with database, logfiles, folders"
 
 command :dump do |command|
   command.desc "Create a backup"
   command.flag([:stage], desc: 'stage', type: String, long_desc: 'Stage where processor is deployed to', default_value: Eh::Settings.current.default_stage)
-  command.switch([:v, :verbose], :desc => 'Show additional output.')
 
+  command.desc('Download dumped database')
   command.command :download do |command|
 
     command.action do |global_options, options, args|
@@ -21,6 +21,7 @@ command :dump do |command|
     end
   end
 
+  command.desc('Create dump file from database')
   command.command :create do |command|
 
     command.action do |global_options, options, args|
@@ -35,13 +36,11 @@ command :dump do |command|
       cmds << "cd #{dir} && zip -r #{zip_target} ."
       cmds << "rm -rf #{dir}"
 
-
-      Deployer::Executor.new(stage(options).single_host_stage, verbose: options[:verbose]) do |executor|
+      Deployer::Executor.new(stage(options).single_host_stage, verbose: global_options[:verbose]) do |executor|
         cmds.each do |cmd|
           executor.execute(cmd)
         end
       end
-
 
       puts "Created an dump in #{zip_target}. Use #{stamp.green} as identifier for eh dump download."
     end

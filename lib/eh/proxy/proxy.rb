@@ -28,21 +28,23 @@ module Eh
       end
 
       def remove(name)
+        raise "Needs a proxy NAME to remove" if name.nil?
         proxy = find_proxy_by_name(name)
         if proxy.nil?
-          raise "No proxy with name #{name}"
+          raise "No proxy with given name [#{name}]"
         end
 
         Eh::Settings.current.data['proxies'].reject! { |json| json['name'] == name}
         Eh::Settings.current.write
+        puts "Proxy [#{name}] has been removed".green
       end
 
       def add(name, url)
         if name.nil? || url.nil?
-          raise "Please provide name and url"
+          raise "Please provide NAME and PROXY_URL"
         end
         if find_proxy_by_name(name) || find_proxy_by_url(url)
-          raise "Already configured proxy for '#{name} -> #{url}'"
+          raise "Already configured proxy for [#{name} -> #{url}]"
         end
 
         Eh::Settings.current.data['proxies'] << {
@@ -51,23 +53,27 @@ module Eh
           'default' => (Eh::Settings.current.proxies.length == 0)
         }
         Eh::Settings.current.write
+        puts "Proxy [#{name}] has been added".green
       end
 
       def select(name)
+        raise "Needs a proxy NAME to select" if name.nil?
         proxy = find_proxy_by_name(name)
         if proxy.nil?
-          raise "No proxy found with name #{name}"
+          raise "No proxy found with given name [#{name}]"
         end
 
         Eh::Settings.current.data['proxies'].each do |json|
           json['default'] = (json['name'] == name)
         end
         Eh::Settings.current.write
+        puts "Proxy [#{name}] has been selected".green
       end
 
       def list
+        puts "Defined Proxies"
         Eh::Settings.current.proxies.each do |proxy|
-          puts proxy.label
+          puts proxy.label.send( proxy.label =~ /\(default\)/ ? :green : :white )
         end
       end
 

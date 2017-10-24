@@ -1,28 +1,27 @@
-desc 'dump and restore Eventhub database. Attention: those commands run on the local machine, not remote.'
-command :db do |command|
+desc 'Database commands (run on local machine)'
+command :database do |database|
 
-  command.switch([:v, :verbose], :desc => 'Show additional output.')
-  command.flag([:user], default_value: 'event_hub_console', desc: 'DB User')
-  command.flag([:db], default_value: 'event_hub_console', desc: 'DB name')
-  command.flag([:file], desc: "Output Filename, last backup will be taken as default")
+  database.flag([:user], default_value: 'event_hub_console', desc: 'DB User')
+  database.flag([:db], default_value: 'event_hub_console', desc: 'DB name')
+  database.flag([:file], desc: "Output Filename, last backup will be taken as default")
 
-  command.command :dump do |c|
-    c.action do |global_options, options, args|
+  database.desc 'Dump database from defined stage'
+  database.command :dump do |dump|
+    dump.action do |global_options, options, args|
       base = Eh::Settings.current.db_backups_dir
       stamp = Time.now.strftime('%Y%m%d%H%M%S')
       target = options[:file] || "#{stamp}-console-dump.sql.compressed"
 
       cmd = "mkdir -p #{base} && cd #{base} && pg_dump -Fc -U#{options[:user]} #{options[:db]} -f#{target}"
-      if options[:verbose]
-        puts "will execute '#{cmd}'"
-      end
+      puts "will execute '#{cmd}'" if global_options[:verbose]
       system cmd
-      puts "Dumped DB to #{target}"
+      puts "Database has been dumped to #{target}".green
     end
   end
 
-  command.command :restore do |c|
-    c.action do |global_options, options, args|
+  database.desc 'Restore database to defined stage'
+  database.command :restore do |restore|
+    restore.action do |global_options, options, args|
       source = options[:file] || begin
         base = Eh::Settings.current.db_backups_dir
         pattern = File.join(base, '*')
@@ -36,19 +35,19 @@ command :db do |command|
       answer = $stdin.gets.chomp.downcase
       if answer == 'yes'
         cmd = "pg_restore -Fc -U #{options[:user]} -d #{options[:db]} #{source}"
-        if options[:verbose]
-          puts "will execute '#{cmd}'"
-        end
+        puts "will execute '#{cmd}'" if global_options[:verbose]
         system cmd
+        puts "Database has been restored".green
       else
-        puts "Abort."
+        puts "Aborted".green
       end
     end
   end
 
-  command.command :cleanup_dumps do |c|
-    c.flag([:keep], type: Integer, desc: "How many dumps to keep", default_value: 25)
-    c.action do |global_options, options, args|
+  database.desc 'Cleanup dump files'
+  database.command :cleanup do |cleanup|
+    cleanup.flag([:keep], type: Integer, desc: "How many dumps to keep", default_value: 25)
+    cleanup.action do |global_options, options, args|
       keep = options[:keep]
       base = Eh::Settings.current.db_backups_dir
       pattern = File.join(base, '*')
@@ -56,12 +55,10 @@ command :db do |command|
       to_delete = files[keep..-1] || []
 
       to_delete.each do |file|
-        if options[:verbose]
-          puts "will delete #{file}"
-        end
+        puts "will delete #{file}" if global_options[:verbose]
         system "rm #{file}"
       end
-      puts "deleted #{to_delete.size} file(s)"
+      puts "Deleted #{to_delete.size} file(s)".green
     end
   end
 

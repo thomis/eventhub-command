@@ -1,14 +1,16 @@
-desc 'generate template for a new processor'
-arg_name 'module_name processor_name'
+desc 'Generate template for a new processor'
 command :generate do |c|
-  c.command :processor do |c|
+
+  c.arg_name 'MODULE_NAME PROCESSOR_NAME'
+  c.desc "Generate ruby based processor"
+  c.command :ruby do |c|
     c.action do |global_options, options, args|
       require 'active_support/core_ext/string/inflections'
       require 'fileutils'
       require 'erb'
 
       if args.size != 2
-        puts "Needs exactly 2 arguments: eh generate_processor ModuleName ProcessorName"
+        puts "Needs exactly 2 arguments: eh generate processor MODULE NAME"
         exit -1
       end
 
@@ -17,7 +19,7 @@ command :generate do |c|
       underscored_processor_module_name = processor_module_name.underscore
       underscored_processor_class_name = processor_class_name.underscore
 
-      destination_dir = Eh::Settings.current.processors_src_dir
+      destination_dir = Eh::Settings.current.ruby_processors_src_dir
       destination_dir = File.join(destination_dir, "#{underscored_processor_module_name}.#{underscored_processor_class_name}")
 
       if Dir.exists? destination_dir

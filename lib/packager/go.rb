@@ -40,7 +40,7 @@ class Packager::Go
     processor_names.each do |processor_name|
       package_processor(processor_name)
     end
-    puts "Done packaging #{processor_names.size} processors"
+    puts "Done packaging #{processor_names.size} processors".green
   end
 
   def package_processor(processor_name)

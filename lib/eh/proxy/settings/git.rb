@@ -31,7 +31,7 @@ module Eh::Proxy::Settings
     end
 
     def set_command(value)
-      "git config --global http.proxy http://#{value} ; git config --global https.proxy https://#{value}"
+      "git config --global http.proxy http://#{trim_url(value)} ; git config --global https.proxy https://#{trim_url(value)}"
     end
   end
 end

@@ -12,9 +12,7 @@ class Deployer::RubyDeployer < Deployer::BaseDeployer
     Deployer::Executor.new(stage, verbose: verbose?) do |executor|
       create_base_dirs(executor)
 
-
       update_cached_copy(executor)
-
 
       # fetch processor_names unless they have been passed as an argument to the initializer
       processor_names_to_deploy = resolve_processor_names(executor, options)

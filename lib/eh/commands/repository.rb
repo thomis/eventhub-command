@@ -1,39 +1,45 @@
-desc "manage repositories"
+desc "Manage repositories"
 
 command :repository do |command|
   command.desc "Lists all avaiable repositories"
   command.command :list do |command|
     command.action do |global_options,options,args|
 
+      puts "Defined Repositories [#{Eh::Settings.current.data['repositories'].size}]"
       Eh::Settings.current.repositories.each_with_index do |repository, index|
         if repository.current?
-          puts "#{index + 1}: #{repository.url} (current)"
+          puts " #{index+1}. #{repository.url} (current)".green
         else
-          puts "#{index + 1}: #{repository.url}"
+          puts " #{index+1}. #{repository.url}"
         end
       end
     end
   end
 
-  command.desc "selects a repository: eh repository select INDEX"
+  command.desc "Selects a repository by INDEX"
+  command.arg_name 'INDEX'
   command.command :select do |command|
     command.action do |global_options,options,args|
       if Eh::Settings.current.repositories.length == 0
         raise "No repository configured so far"
       end
       if args.length != 1
-        raise "Need exactly 1 arguments: index"
+        raise "Needs mandatory INDEX argument"
       end
       selected = args[0].to_i
+      if selected > Eh::Settings.current.data['repositories'].size
+        raise "Argument INDEX is out of range"
+      end
       Eh::Settings.current.data['repositories'].each_with_index do |repository, index|
         repository['current'] = (index + 1) == selected
       end
-      puts "Selected #{Eh::Settings.current.repository.url}"
       Eh::Settings.current.write
+      puts "Repository selected: #{Eh::Settings.current.repository.url}".green
     end
   end
 
-  command.desc 'add a repository to the config: eh repository add URL DIR USERNAME PASSWORD'
+  command.desc 'Add a repository with URL DIR USERNAME PASSWORD'
+  command.arg_name 'URL DIR USERNAME PASSWORD'
   command.command :add do |command|
     command.action do |global_options, options, args|
       if args.length != 4
@@ -46,7 +52,7 @@ command :repository do |command|
         repository['url'] == args[0]
       end
       if exists
-        raise "Already configured repository for '#{args[0]}'"
+        raise "Already configured repository [#{args[0]}]"
       end
 
       Eh::Settings.current.data['repositories'] << {
@@ -57,25 +63,32 @@ command :repository do |command|
         'current' => (Eh::Settings.current.data['repositories'].length == 0)
       }
       Eh::Settings.current.write
+
+      puts "New Repository [#{args[0]}] has beed added. Total Repositories: #{Eh::Settings.current.data['repositories'].size}".green
     end
   end
 
 
-  command.desc 'remove a repository from the config: eh repository remove INDEX'
+  command.desc 'Remove a repository by INDEX'
+  command.arg_name 'INDEX'
   command.command :remove do |command|
     command.action do |global_options, options, args|
 
       if args.length != 1
-        raise "Need exactly 1 arguments: index"
+        raise "Needs mandatory INDEX argument"
       end
       selected = args[0].to_i
 
       if Eh::Settings.current.repositories[selected - 1].nil?
-        raise "No repository with index #{selected}"
+        raise "No repository with index [selected]"
       end
 
       Eh::Settings.current.data['repositories'].delete_at(selected - 1)
       Eh::Settings.current.write
+
+      puts "Repository has been removed. Total Repositories: #{Eh::Settings.current.data['repositories'].size}".green
     end
   end
+
+  command.default_command :list
 end

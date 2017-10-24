@@ -1,25 +1,39 @@
-desc 'manage stages'
+desc 'Manage stages'
 command :stage do |command|
-
-  command.switch([:v, :verbose], :desc => 'Show additional output.')
-  command.command :list do |c|
-    c.action do |global_options, options, args|
+  command.desc 'List defined stages'
+  command.command :list do |list|
+    list.action do |global_options, options, args|
       dir = Eh::Settings.current.stages_dir
-      puts "Checking in #{dir}".green if options[:verbose]
-      puts "Available stages are:".blue
+      puts "Checking in #{dir}".yellow if global_options[:verbose]
+      puts "Available Stages"
       Dir.glob(File.join(dir, '*.yml')) do |name|
         stage_name = File.basename(name, '.*')
-        default = '(default)' if Eh::Settings.current.default_stage == stage_name
-        puts "#{stage_name} #{default}".light_blue
+        is_default = Eh::Settings.current.default_stage == stage_name
+        puts " - #{stage_name} #{is_default ? '(default)' : nil}".send(is_default ? :green : :white)
       end
     end
   end
-  command.command :select_default do |c|
-    c.action do |global_options, options, args|
-      stage = args[0]
-      Eh::Settings.current.data['default_stage'] = stage
+
+  command.desc 'Select default stage'
+  command.arg_name 'NAME'
+  command.command :select do |default|
+    default.action do |global_options, options, args|
+      new_stage = args[0]
+
+      if args.size != 1
+        raise "Needs a stage NAME to select"
+      end
+
+      # check if new_stage.yml exist in stages folder
+      unless File.exist?(File.join(Eh::Settings.current.stages_dir, "#{new_stage}.yml"))
+        raise "Stage [#{new_stage}] is not defined yet"
+      end
+
+      Eh::Settings.current.data['default_stage'] = new_stage
       Eh::Settings.current.write
-      puts "Set stage default to '#{stage}'"
+      puts "Default stage selected: #{new_stage}".green
     end
   end
+
+  command.default_command :list
 end

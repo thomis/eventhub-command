@@ -26,7 +26,7 @@ module Eh::Proxy::Settings
     end
 
     def set(value)
-      uri = URI.parse("http://#{value}")
+      uri = URI.parse("http://#{trim_url(value)}")
 
       Deployer::Executor.new(stage, verbose: verbose?) do |executor|
         executor.download("~/.subversion/servers", temporary_config_file)
