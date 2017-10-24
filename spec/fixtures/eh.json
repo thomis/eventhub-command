@@ -1,0 +1,18 @@
+{
+  "repositories": [
+    {
+      "url": "https://repo1.server1.com",
+      "dir": "/data/project1/branches/master",
+      "deploy_username": "user1",
+      "deploy_password": "password1",
+      "current": true
+    },
+    {
+      "url": "https://repo2.server2.com",
+      "dir": "/data/project2/branches/master",
+      "deploy_username": "user2",
+      "deploy_password": "password2",
+      "current": true
+    }
+  ]
+}

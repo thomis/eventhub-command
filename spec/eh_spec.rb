@@ -15,6 +15,11 @@ RSpec.describe Eh do
     expect(response).to match(/command line tools for eventhub/i)
   end
 
+  it 'shows help with help' do
+    response = `bin/eh help`
+    expect(response).to match(/command line tools for eventhub/i)
+  end
+
   it 'shows help with no option given' do
     response = `bin/eh`
     expect(response).to match(/command line tools for eventhub/i)

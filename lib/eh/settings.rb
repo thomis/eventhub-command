@@ -122,6 +122,7 @@ class Eh::Settings
   end
 
   def rails_src_dir
+    # appears 2 times. What is correct?
     File.join(repository.dir, 'src', 'rails')
   end
 
@@ -134,6 +135,7 @@ class Eh::Settings
   end
 
   def rails_src_dir
+    # appears 2 times. What is correct?
     File.join(repository.dir, 'src', 'rails', 'console')
   end
 

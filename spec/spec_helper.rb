@@ -13,6 +13,7 @@
 # it.
 #
 
+require 'json'
 require_relative '../lib/eh'
 
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
