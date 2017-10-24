@@ -57,7 +57,7 @@ command :repository do |command|
 
       Eh::Settings.current.data['repositories'] << {
         'url' => args[0],
-        'dir' => args[1],
+        'dir' => File::ALT_SEPARATOR ? args[1].gsub(File::ALT_SEPARATOR, File::SEPARATOR) : args[1],
         'deploy_username' => args[2],
         'deploy_password' => args[3],
         'current' => (Eh::Settings.current.data['repositories'].length == 0)
