@@ -1,3 +1,7 @@
+## 0.7.2 (2017-11-7)
+
+* Edit: bundler dependency
+
 ## 0.7.1 (2017-10-24)
 
 * Add: Support for windows backslashes
