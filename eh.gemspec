@@ -19,7 +19,7 @@ spec = Gem::Specification.new do |s|
   s.executables             = ['eh']
   s.required_ruby_version   = '>= 1.9.3'
 
-  s.add_development_dependency "bundler", "~> 1.15.4"
+  s.add_development_dependency "bundler", "~> 1.16.0"
   s.add_development_dependency('rake', '~> 12.0')
   s.add_development_dependency("rspec", "~> 3.7")
 
