@@ -19,14 +19,14 @@ spec = Gem::Specification.new do |s|
   s.executables             = ['eh']
   s.required_ruby_version   = '>= 1.9.3'
 
-  s.add_development_dependency "bundler", "~> 1.16.0"
+  s.add_development_dependency "bundler", "~> 1.16"
   s.add_development_dependency('rake', '~> 12.0')
   s.add_development_dependency("rspec", "~> 3.7")
 
-  s.add_runtime_dependency('gli','2.17.0')
-  s.add_runtime_dependency('rubyzip', '~> 1.2.1')
-  s.add_runtime_dependency('net-ssh', '~> 4.2.0')
-  s.add_runtime_dependency('colorize', '~> 0.8.1')
-  s.add_runtime_dependency('highline', '~> 1.7.8')
-  s.add_runtime_dependency('parseconfig', '~> 1.0.8')
+  s.add_runtime_dependency('gli','~> 2.17')
+  s.add_runtime_dependency('rubyzip', '~> 1.2 ')
+  s.add_runtime_dependency('net-ssh', '~> 4.2 ')
+  s.add_runtime_dependency('colorize', '~> 0.8 ')
+  s.add_runtime_dependency('highline', '~> 1.7 ')
+  s.add_runtime_dependency('parseconfig', '~> 1.0 ')
 end
