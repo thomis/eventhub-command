@@ -1,3 +1,7 @@
+## 0.7.4 (2018-02-12)
+
+* Includes .ruby-version in ruby packages
+
 ## 0.7.2 (2017-11-7)
 
 * Edit: bundler dependency

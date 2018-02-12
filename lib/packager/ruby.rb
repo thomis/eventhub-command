@@ -42,7 +42,7 @@ class Packager::Ruby
 
   def files_to_zip(processor_name)
     exclude_directories = %w{logs/ log/ exceptions/ pids/ tmp/}
-    files = Dir.glob(File.join(processor_source_dir(processor_name), '**', '*')).select do |name|
+    files = Dir.glob(File.join(processor_source_dir(processor_name), '**', '{*,.ruby-version}')).select do |name|
       exclude_directories.none? do |exclude|
         prefix = File.join(processor_source_dir(processor_name), exclude)
         name.start_with?(prefix)
@@ -84,7 +84,7 @@ class Packager::Ruby
   def processor_names
     included_names = existing_processor_names
     included_names = included_processor_names(included_names)
-    excluded_names  = excluded_processor_names(included_names)
+    excluded_names = excluded_processor_names(included_names)
     included_names - excluded_names
   end
 
