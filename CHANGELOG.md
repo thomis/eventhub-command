@@ -1,3 +1,7 @@
+## 0.7.5 (2018-02-13)
+
+* Re-release
+
 ## 0.7.4 (2018-02-12)
 
 * Includes .ruby-version in ruby packages
