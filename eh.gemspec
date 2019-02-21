@@ -19,9 +19,9 @@ spec = Gem::Specification.new do |s|
   s.executables             = ['eh']
   s.required_ruby_version   = '>= 1.9.3'
 
-  s.add_development_dependency "bundler", "~> 1.16"
-  s.add_development_dependency('rake', '~> 12.0')
-  s.add_development_dependency("rspec", "~> 3.7")
+  s.add_development_dependency "bundler", "~> 2.0"
+  s.add_development_dependency('rake', '~> 12.3')
+  s.add_development_dependency("rspec", "~> 3.8")
 
   s.add_runtime_dependency('gli','~> 2.17')
   s.add_runtime_dependency('rubyzip', '~> 1.2 ')

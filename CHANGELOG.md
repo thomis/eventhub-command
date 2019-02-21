@@ -1,3 +1,7 @@
+## 0.8.0 (2018-02-21)
+
+* Change: Update gem dependencies (rake, rspec, bundler, GLI)
+
 ## 0.7.5 (2018-02-13)
 
 * Re-release
