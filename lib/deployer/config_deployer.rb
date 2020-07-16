@@ -13,7 +13,7 @@ class Deployer::ConfigDeployer < Deployer::BaseDeployer
       source = cached_copy_dir('..', 'config', "%{stagename}", "%{hostname}", '')
       target = config_source_dir
 
-      cmd = "rsync -r --exclude=.svn #{source} #{target}"
+      cmd = "rm -rf #{target}/* && rsync -r --exclude=.svn #{source} #{target}"
       executor.execute(cmd)
     end
   end
