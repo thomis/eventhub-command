@@ -1,5 +1,4 @@
 class Deployer::ConsoleDeployer < Deployer::BaseDeployer
-
   def initialize(options)
     @options = options
   end
@@ -19,6 +18,6 @@ class Deployer::ConsoleDeployer < Deployer::BaseDeployer
   end
 
   def stage
-    @options.fetch(:stage, 'development')
+    @options.fetch(:stage, "development")
   end
 end

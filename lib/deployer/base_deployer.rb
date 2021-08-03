@@ -11,11 +11,11 @@ class Deployer::BaseDeployer
   private
 
   def config_source_dir(*extra_paths)
-    File.join(base_dir, 'config', *extra_paths)
+    File.join(base_dir, "config", *extra_paths)
   end
 
   def log_deployment(executor, message)
-    executor.execute("echo $(date): #{message} - #{ENV['USER']} >> #{deploy_log_file}")
+    executor.execute("echo $(date): #{message} - #{ENV["USER"]} >> #{deploy_log_file}")
   end
 
   def base_dir
@@ -23,7 +23,7 @@ class Deployer::BaseDeployer
   end
 
   def deploy_log_file
-    File.join(shared_dir, 'logs', 'deploy.log')
+    File.join(shared_dir, "logs", "deploy.log")
   end
 
   def deploy_via
@@ -35,32 +35,30 @@ class Deployer::BaseDeployer
   end
 
   def via_scp?
-    deploy_via == 'scp'
+    deploy_via == "scp"
   end
 
   def shared_dir
-    File.join(base_dir, 'shared')
+    File.join(base_dir, "shared")
   end
 
   def cached_copy_scp_dir
-    File.join(shared_dir, 'cached_copy_scp')
+    File.join(shared_dir, "cached_copy_scp")
   end
 
   def cached_copy_svn_dir
-    File.join(shared_dir, 'cached_copy_svn')
+    File.join(shared_dir, "cached_copy_svn")
   end
 
   def cached_copy_dir(*extra_paths)
     dir = if via_scp?
       cached_copy_scp_dir
+    elsif options[:tag]
+      File.join(cached_copy_svn_dir, "tags", options[:tag], "releases")
+    elsif options[:branch]
+      File.join(cached_copy_svn_dir, "branches", options[:branch], "releases")
     else
-      if options[:tag]
-        File.join(cached_copy_svn_dir, 'tags', options[:tag], 'releases')
-      elsif options[:branch]
-        File.join(cached_copy_svn_dir, 'branches', options[:branch], 'releases')
-      else
-        File.join(cached_copy_svn_dir, 'branches', 'master', 'releases')
-      end
+      File.join(cached_copy_svn_dir, "branches", "master", "releases")
     end
     File.join(dir, *extra_paths)
   end
@@ -81,16 +79,15 @@ class Deployer::BaseDeployer
     "#{scm_base_url}/branches/master/releases"
   end
 
-
   def create_base_dirs(executor)
     dirs = [
-      File.join(base_dir, 'config'),
-      File.join(base_dir, 'ruby'),
-      File.join(base_dir, 'mule'),
-      File.join(base_dir, 'rails'),
+      File.join(base_dir, "config"),
+      File.join(base_dir, "ruby"),
+      File.join(base_dir, "mule"),
+      File.join(base_dir, "rails"),
       shared_dir,
-      File.join(shared_dir, 'pids'),
-      File.join(shared_dir, 'logs'),
+      File.join(shared_dir, "pids"),
+      File.join(shared_dir, "logs"),
       cached_copy_scp_dir
     ]
     cmds = dirs.map do |dir|
@@ -115,7 +112,6 @@ class Deployer::BaseDeployer
 
   private
 
-
   # Executes an ls on all hosts and returns the combined
   # list of files or dirs.
   def remote_ls(executor, options, pattern)
@@ -129,7 +125,7 @@ class Deployer::BaseDeployer
 
   def verify_deployment_list!(requested, available)
     # remove requested that are not available
-    puts 'Deployment List'.light_blue.on_blue
+    puts "Deployment List".light_blue.on_blue
     abort = false
     requested.each do |name|
       if available.include?(name)
@@ -143,11 +139,9 @@ class Deployer::BaseDeployer
       puts "Not all requested components are available in #{cached_copy_dir}. Will abort.".red
       raise
     end
-
   end
 
   def inspector_command(action, name)
     "curl -X POST --data '[{\"name\": \"#{name}\",\"action\": \"#{action}\"}]' --header \"Content-Type:application/json\" http://localhost:5500/applications"
   end
-
 end

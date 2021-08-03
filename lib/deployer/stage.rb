@@ -27,8 +27,8 @@ class Deployer::Stage
     data = YAML.load_file(file)
     data.map do |_, config|
       stage = Deployer::Stage.new(name)
-      config['hosts'].each do |host|
-        stage.host(host['host'], host['port'], host['user'])
+      config["hosts"].each do |host|
+        stage.host(host["host"], host["port"], host["user"])
       end
       stage
     end.first

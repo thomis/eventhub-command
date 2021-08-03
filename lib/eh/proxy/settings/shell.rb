@@ -8,7 +8,6 @@ module Eh::Proxy::Settings
     def set(value)
       Deployer::Executor.new(stage, verbose: verbose?) do |executor|
         executor.execute(set_command(value), abort_on_error: false)
-
       end
     end
 
@@ -18,11 +17,10 @@ module Eh::Proxy::Settings
       end
     end
 
-
     private
 
     def proxy_file
-      '~/.proxy'
+      "~/.proxy"
     end
 
     def verbose?

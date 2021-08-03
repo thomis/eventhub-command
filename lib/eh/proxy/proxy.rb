@@ -1,9 +1,9 @@
 module Eh
   module Proxy
-    require 'uri'
-    require_relative 'settings/git'
-    require_relative 'settings/svn'
-    require_relative 'settings/shell'
+    require "uri"
+    require_relative "settings/git"
+    require_relative "settings/svn"
+    require_relative "settings/shell"
 
     class Proxy
       def initialize(stage_name, verbose)
@@ -34,7 +34,7 @@ module Eh
           raise "No proxy with given name [#{name}]"
         end
 
-        Eh::Settings.current.data['proxies'].reject! { |json| json['name'] == name}
+        Eh::Settings.current.data["proxies"].reject! { |json| json["name"] == name }
         Eh::Settings.current.write
         puts "Proxy [#{name}] has been removed".green
       end
@@ -47,10 +47,10 @@ module Eh
           raise "Already configured proxy for [#{name} -> #{url}]"
         end
 
-        Eh::Settings.current.data['proxies'] << {
-          'url' => url,
-          'name' => name,
-          'default' => (Eh::Settings.current.proxies.length == 0)
+        Eh::Settings.current.data["proxies"] << {
+          "url" => url,
+          "name" => name,
+          "default" => (Eh::Settings.current.proxies.length == 0)
         }
         Eh::Settings.current.write
         puts "Proxy [#{name}] has been added".green
@@ -63,8 +63,8 @@ module Eh
           raise "No proxy found with given name [#{name}]"
         end
 
-        Eh::Settings.current.data['proxies'].each do |json|
-          json['default'] = (json['name'] == name)
+        Eh::Settings.current.data["proxies"].each do |json|
+          json["default"] = (json["name"] == name)
         end
         Eh::Settings.current.write
         puts "Proxy [#{name}] has been selected".green
@@ -73,11 +73,12 @@ module Eh
       def list
         puts "Defined Proxies"
         Eh::Settings.current.proxies.each do |proxy|
-          puts proxy.label.send( proxy.label =~ /\(default\)/ ? :green : :white )
+          puts proxy.label.send(/\(default\)/.match?(proxy.label) ? :green : :white)
         end
       end
 
       private
+
       attr_reader :stage_name, :verbose
 
       def stage
@@ -99,7 +100,6 @@ module Eh
       def find_default_proxy
         Eh::Settings.current.proxies.find { |proxy| proxy.default }
       end
-
     end
   end
 end

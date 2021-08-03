@@ -22,31 +22,31 @@ class Deployer::RubyDeployer < Deployer::BaseDeployer
         log_deployment(executor, "Deploying #{processor_name} via #{deploy_via} from #{cached_copy_dir}")
 
         # stop old one
-        cmd = inspector_command('stop', processor_name)
+        cmd = inspector_command("stop", processor_name)
         executor.execute(cmd, abort_on_error: false, comment: "Request to stop component")
 
         # unzip package
-        target = deploy_dir('ruby')
-        source = cached_copy_dir('ruby',"#{processor_name}.zip")
+        target = deploy_dir("ruby")
+        source = cached_copy_dir("ruby", "#{processor_name}.zip")
         executor.execute("rm -rf #{processor_dir(processor_name)} && unzip -o -d #{target} #{source}")
 
         # copy config
         executor.execute("if [[ -d #{config_source_dir(processor_name)} ]] ; then cp -r #{config_source_dir(processor_name)}/* #{processor_dir(processor_name)}; fi")
 
         # remove log dir if it exists
-        executor.execute("if [[ -d #{processor_dir(processor_name, 'logs')} ]] ; then rm -rf #{processor_dir(processor_name, 'logs')}; fi")
+        executor.execute("if [[ -d #{processor_dir(processor_name, "logs")} ]] ; then rm -rf #{processor_dir(processor_name, "logs")}; fi")
 
         # symlink log dir
-        executor.execute("ln -s #{logs_dir} #{processor_dir(processor_name, 'logs')}")
+        executor.execute("ln -s #{logs_dir} #{processor_dir(processor_name, "logs")}")
 
         # symlink pids dir
-        executor.execute("ln -s #{pids_dir} #{processor_dir(processor_name, 'pids')}")
+        executor.execute("ln -s #{pids_dir} #{processor_dir(processor_name, "pids")}")
 
         # install gems
         executor.execute("cd #{processor_dir(processor_name)} && bundle install --without test")
 
         # start new one
-        cmd = inspector_command('start', processor_name)
+        cmd = inspector_command("start", processor_name)
         executor.execute(cmd, abort_on_error: false, comment: "Request to stop component")
       end
     end
@@ -56,8 +56,8 @@ class Deployer::RubyDeployer < Deployer::BaseDeployer
 
   def update_cached_copy(executor)
     if via_scp?
-      source = Eh::Settings.current.releases_dir('ruby', '*.zip')
-      target_dir = File.join(cached_copy_dir, 'ruby')
+      source = Eh::Settings.current.releases_dir("ruby", "*.zip")
+      target_dir = File.join(cached_copy_dir, "ruby")
       executor.execute("rm -rf #{target_dir}/*.zip && mkdir -p #{target_dir}")
       executor.upload(source, target_dir)
     else
@@ -66,11 +66,11 @@ class Deployer::RubyDeployer < Deployer::BaseDeployer
   end
 
   def logs_dir
-    File.join(shared_dir, 'logs')
+    File.join(shared_dir, "logs")
   end
 
   def pids_dir
-    File.join(shared_dir, 'pids')
+    File.join(shared_dir, "pids")
   end
 
   def deploy_dir(*extra_paths)
@@ -78,23 +78,23 @@ class Deployer::RubyDeployer < Deployer::BaseDeployer
   end
 
   def processor_dir(*extra_paths)
-    File.join(deploy_dir, 'ruby', *extra_paths)
+    File.join(deploy_dir, "ruby", *extra_paths)
   end
 
   def config_source_dir(processor_name)
-    super('ruby', processor_name)
+    super("ruby", processor_name)
   end
 
   # Detect what processors to deploy
   #
   def resolve_processor_names(executor, options)
-    available = remote_ls(executor, options, File.join(cached_copy_dir, 'ruby', '*.zip')).map do |name|
-      File.basename(name, '.zip')
+    available = remote_ls(executor, options, File.join(cached_copy_dir, "ruby", "*.zip")).map do |name|
+      File.basename(name, ".zip")
     end
 
     fetched = Array(processor_names).map do |name|
-      if name.include?('*') # resolve pattern on remote machine
-        remote_ls(executor, options, File.join(cached_copy_dir, 'ruby', "#{name}.zip"))
+      if name.include?("*") # resolve pattern on remote machine
+        remote_ls(executor, options, File.join(cached_copy_dir, "ruby", "#{name}.zip"))
       else
         name
       end
@@ -104,7 +104,7 @@ class Deployer::RubyDeployer < Deployer::BaseDeployer
     end
 
     fetched = fetched.flatten.map do |name|
-      File.basename(name, '.zip')
+      File.basename(name, ".zip")
     end
 
     verify_deployment_list!(fetched, available)
@@ -112,15 +112,13 @@ class Deployer::RubyDeployer < Deployer::BaseDeployer
     fetched
   end
 
-
   # custom ruby sorting makes sure dispatcher is always first if multiple go apps are given
   #
   def ruby_sorter
     ->(a, b) do
-      return -1 if a =~ /dispatcher/i
-      return 1 if b =~ /dispatcher/i
+      return -1 if /dispatcher/i.match?(a)
+      return 1 if /dispatcher/i.match?(b)
       a <=> b
     end
   end
-
 end

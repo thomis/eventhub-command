@@ -5,15 +5,14 @@ class Packager::Rails
   end
 
   def package
-
     app_directories.each do |dir|
       included = files_and_dirs.map do |s|
         File.join(app_name(dir), s)
-      end.join(' ')
+      end.join(" ")
       remove_destination_file(dir)
-      cmd = "cd #{File.join(dir, '..')} && zip -r #{destination_file_name(dir)} #{included} >> /dev/null"
+      cmd = "cd #{File.join(dir, "..")} && zip -r #{destination_file_name(dir)} #{included} >> /dev/null"
       ret = system cmd
-      puts "Packaged: #{app_name(dir).blue} to #{destination_file_name(dir)}: #{ret ? 'OK'.green : 'ERROR'.red}"
+      puts "Packaged: #{app_name(dir).blue} to #{destination_file_name(dir)}: #{ret ? "OK".green : "ERROR".red}"
     end
   end
 
@@ -35,7 +34,7 @@ class Packager::Rails
   end
 
   def files_and_dirs
-    %w{Capfile Gemfile Gemfile.lock README.rdoc Rakefile app bin db lib public spec vendor}
+    %w[Capfile Gemfile Gemfile.lock README.rdoc Rakefile app bin db lib public spec vendor]
   end
 
   def remove_destination_file(dir)

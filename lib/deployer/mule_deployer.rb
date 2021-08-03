@@ -7,11 +7,11 @@ class Deployer::MuleDeployer < Deployer::BaseDeployer
   end
 
   def adapter_cached_copy(adapter_name)
-    cached_copy_dir('mule', "#{adapter_name}.zip")
+    cached_copy_dir("mule", "#{adapter_name}.zip")
   end
 
   def config_source_dir(adapter_name)
-    super('mule', adapter_name)
+    super("mule", adapter_name)
   end
 
   def deploy!
@@ -31,7 +31,7 @@ class Deployer::MuleDeployer < Deployer::BaseDeployer
         log_deployment(executor, "Deploying #{adapter_name} via #{deploy_via} from #{cached_copy_dir}")
         # make a copy of the zip files to merge them with config
         cached_copy_source = adapter_cached_copy(adapter_name)
-        configuration_target = File.join(base_dir, 'mule', "#{adapter_name}.zip")
+        configuration_target = File.join(base_dir, "mule", "#{adapter_name}.zip")
         executor.execute("cp #{cached_copy_source} #{configuration_target}")
 
         # copy config
@@ -44,17 +44,16 @@ class Deployer::MuleDeployer < Deployer::BaseDeployer
     end
   end
 
-
   private
 
   def resolve_adapter_names(executor, options)
-    available = remote_ls(executor, options, cached_copy_dir('mule', '*.zip')).map do |name|
-      File.basename(name, '.zip')
+    available = remote_ls(executor, options, cached_copy_dir("mule", "*.zip")).map do |name|
+      File.basename(name, ".zip")
     end
 
     fetched = Array(adapter_names).map do |name|
-      if name.include?('*') # resolve pattern on remote machine
-        remote_ls(executor, options, cached_copy_dir('mule', "#{name}.zip"))
+      if name.include?("*") # resolve pattern on remote machine
+        remote_ls(executor, options, cached_copy_dir("mule", "#{name}.zip"))
       else
         name
       end
@@ -64,7 +63,7 @@ class Deployer::MuleDeployer < Deployer::BaseDeployer
     end
 
     fetched = fetched.flatten.map do |name|
-      File.basename(name, '.zip')
+      File.basename(name, ".zip")
     end
 
     verify_deployment_list!(fetched, available)
@@ -74,8 +73,8 @@ class Deployer::MuleDeployer < Deployer::BaseDeployer
 
   def update_cached_copy(executor)
     if via_scp?
-      source = Eh::Settings.current.releases_dir('mule', '*.zip')
-      target_dir = cached_copy_dir('mule')
+      source = Eh::Settings.current.releases_dir("mule", "*.zip")
+      target_dir = cached_copy_dir("mule")
       executor.execute("rm -rf #{target_dir}/*.zip && mkdir -p #{target_dir}")
       executor.upload(source, target_dir)
     else

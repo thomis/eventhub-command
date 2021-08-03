@@ -1,3 +1,19 @@
+## 0.9.0 (2021-08-02)
+
+* Add: Apply ruby styles (standard gem)
+* Add: Simple test coverage (simplecov gem)
+* Change: Update ruby to 2.6.6
+* Change: Update rake to 13.0
+* Change: Update rspec to 3.10
+* Change: Update highline to 2.0
+* Change: Update rubyzip to 2.3
+* Change: Update net-ssh to 6.1
+* Change: Hide scm password for log output
+* Change: Update travis tested ruby versions
+* Change: Remove redundant rails_src_dir method
+* Change: rspec - improve test performance
+* Change: rspec - order is randomized
+
 ## 0.8.0 (2018-02-21)
 
 * Change: Update gem dependencies (rake, rspec, bundler, GLI)

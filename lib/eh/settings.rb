@@ -1,5 +1,4 @@
 class Eh::Settings
-
   attr_reader :data, :file
 
   class Repository
@@ -8,31 +7,31 @@ class Eh::Settings
     end
 
     def url
-      @json['url']
+      @json["url"]
     end
 
     def deploy_username
-      @json['deploy_username']
+      @json["deploy_username"]
     end
 
     def deploy_password
-      @json['deploy_password']
+      @json["deploy_password"]
     end
 
     def dir
-      @json['dir']
+      @json["dir"]
     end
 
     def current?
-      @json['current']
+      @json["current"]
     end
   end
 
   class Proxy
     def initialize(json)
-      @name = json['name']
-      @default = json['default']
-      @url = json['url']
+      @name = json["name"]
+      @default = json["default"]
+      @url = json["url"]
     end
     attr_reader :name, :url, :default
 
@@ -48,13 +47,13 @@ class Eh::Settings
   end
 
   def default_stage
-    @data['default_stage'] || 'development'
+    @data["default_stage"] || "development"
   end
 
   def initialize(file)
     @file = file
     @data = JSON.parse(File.read(file))
-    @data['proxies'] ||= []
+    @data["proxies"] ||= []
   end
 
   def self.load(file)
@@ -62,7 +61,7 @@ class Eh::Settings
   end
 
   def write
-    File.open(file,"w") do |f|
+    File.open(file, "w") do |f|
       f.write(data.to_json)
     end
   end
@@ -76,94 +75,91 @@ class Eh::Settings
   end
 
   def repository
-    repositories.find do |repository|
+    repositories&.find do |repository|
       repository.current?
-    end if repositories
+    end
   end
 
   def repositories
-    repos = data["repositories"].map do |json|
-      Eh::Settings::Repository.new(json)
-    end if data["repositories"]
+    if data["repositories"]
+      repos = data["repositories"].map do |json|
+        Eh::Settings::Repository.new(json)
+      end
+    end
     repos || []
   end
 
-
   def proxies
-    proxies = data['proxies'].map do |json|
-      Eh::Settings::Proxy.new(json)
-    end if data['proxies']
+    if data["proxies"]
+      proxies = data["proxies"].map do |json|
+        Eh::Settings::Proxy.new(json)
+      end
+    end
     proxies || []
   end
 
   def releases_dir(*extra_paths)
-    File.join(repository.dir, 'releases', *extra_paths)
+    File.join(repository.dir, "releases", *extra_paths)
   end
 
-
   def rails_release_dir
-    releases_dir('rails')
+    releases_dir("rails")
   end
 
   def ruby_release_dir
-    releases_dir('ruby')
+    releases_dir("ruby")
   end
 
   def go_release_dir
-    releases_dir('go')
+    releases_dir("go")
   end
 
   def ruby_processors_src_dir
-    File.join(repository.dir, 'src', 'ruby')
+    File.join(repository.dir, "src", "ruby")
   end
 
   def go_processors_src_dir
-    File.join(repository.dir, 'src', 'go', 'src', 'github.com', 'cme-eventhub')
-  end
-
-  def rails_src_dir
-    # appears 2 times. What is correct?
-    File.join(repository.dir, 'src', 'rails')
+    File.join(repository.dir, "src", "go", "src", "github.com", "cme-eventhub")
   end
 
   def console_source_dir
-    File.join(repository.dir, 'src', 'rails', 'console')
+    File.join(repository.dir, "src", "rails", "console")
   end
 
   def deployment_dir
-    File.join(repository.dir, 'src', 'deployment')
+    File.join(repository.dir, "src", "deployment")
   end
 
   def rails_src_dir
     # appears 2 times. What is correct?
-    File.join(repository.dir, 'src', 'rails', 'console')
+    File.join(repository.dir, "src", "rails", "console")
   end
 
   def source_config_dir
-    File.join(repository.dir, 'config')
+    File.join(repository.dir, "config")
   end
 
   def processor_template_repository_url
-    'https://github.com/thomis/eventhub-processor-template.git'
+    "https://github.com/thomis/eventhub-processor-template.git"
   end
 
   def package_tmp_dir
-    './tmp'
+    "./tmp"
   end
 
   def template_tmp_dir
-    '/tmp/eventhub-processor-template/'
+    "/tmp/eventhub-processor-template/"
   end
 
   def deployment_management_files
-    [File.join(deployment_dir, 'management', 'launcher.rb')]
+    [File.join(deployment_dir, "management", "launcher.rb")]
   end
 
   def stages_dir
-    File.join(repository.dir, 'config', 'stages')
+    File.join(repository.dir, "config", "stages")
   end
 
   def db_backups_dir
-    File.expand_path('~/backups')
+    File.expand_path("~/backups")
   end
 end

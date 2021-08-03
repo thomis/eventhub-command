@@ -39,10 +39,9 @@ class Packager::Ruby
     puts " done".green
   end
 
-
   def files_to_zip(processor_name)
-    exclude_directories = %w{logs/ log/ exceptions/ pids/ tmp/}
-    files = Dir.glob(File.join(processor_source_dir(processor_name), '**', '{*,.ruby-version}')).select do |name|
+    exclude_directories = %w[logs/ log/ exceptions/ pids/ tmp/]
+    files = Dir.glob(File.join(processor_source_dir(processor_name), "**", "{*,.ruby-version}")).select do |name|
       exclude_directories.none? do |exclude|
         prefix = File.join(processor_source_dir(processor_name), exclude)
         name.start_with?(prefix)
@@ -116,19 +115,19 @@ class Packager::Ruby
   end
 
   def include_patterns
-    (include_pattern_string || '').split(',').map { |part| part.strip }
+    (include_pattern_string || "").split(",").map { |part| part.strip }
   end
 
   def exclude_patterns
-    (exclude_pattern_string || '').split(',').map { |part| part.strip }
+    (exclude_pattern_string || "").split(",").map { |part| part.strip }
   end
 
   def wildcard_pattern?(pattern)
-    pattern.end_with?('*')
+    pattern.end_with?("*")
   end
 
   def wildcard_pattern_match?(pattern, name)
-    wildcard_pattern?(pattern) && name.start_with?(pattern.gsub('*', ''))
+    wildcard_pattern?(pattern) && name.start_with?(pattern.delete("*"))
   end
 
   def pattern_match?(pattern, name)

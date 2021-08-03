@@ -1,5 +1,5 @@
-require 'net/ssh'
-require 'colorize'
+require "net/ssh"
+require "colorize"
 
 class Deployer::Executor
   attr_reader :stage
@@ -26,7 +26,6 @@ class Deployer::Executor
       log_result(result)
       result
     end
-
   rescue => e
     handle_exception(e, options)
   end
@@ -45,7 +44,6 @@ class Deployer::Executor
       log_result(result)
       result
     end
-
   rescue => e
     handle_exception(e, options)
   end
@@ -58,12 +56,12 @@ class Deployer::Executor
       log_result(result)
       result
     end
-
   rescue => e
     handle_exception(e, options)
   end
 
   private
+
   def handle_exception(e, options)
     if options[:abort_on_error] == false
       puts "warning".black.on_yellow
@@ -73,7 +71,6 @@ class Deployer::Executor
       puts "    #{e.message}".red
     end
     raise unless options[:abort_on_error] == false
-
   end
 
   def verbose?
@@ -92,7 +89,7 @@ class Deployer::Executor
   end
 
   def log_command(cmd, comment = nil)
-    puts cmd.blue
+    puts cmd.filter.blue
     puts "  (#{comment})" if verbose? && comment
   end
 
@@ -104,8 +101,9 @@ class Deployer::Executor
     execute_local "scp -P #{host[:port]} #{host[:user]}@#{host[:host]}:#{source} #{target}"
   end
 
-
-
+  def filter(text)
+    text.gsub(/--password (\S)+/, "--password [FILTERED]")
+  end
 
   def execute_local(command)
     output = nil
@@ -118,12 +116,10 @@ class Deployer::Executor
 
     raise "Command \"#{command}\" returned exit code #{exit_code}" unless exit_code.success?
 
-    result = {
+    {
       stdout: output,
-      stderr: '',
-      exit_code: 0,
+      stderr: "",
+      exit_code: 0
     }
-
-    result
   end
 end

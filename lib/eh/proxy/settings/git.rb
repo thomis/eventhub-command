@@ -17,7 +17,6 @@ module Eh::Proxy::Settings
       end
     end
 
-
     private
 
     def verbose?

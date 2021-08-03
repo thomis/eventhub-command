@@ -1,9 +1,8 @@
 class Net::SSH::Connection::Session
-
   def exec_sc!(command, verbose = false)
-    stdout_data,stderr_data = "",""
-    exit_code, exit_signal = nil,nil
-    self.open_channel do |channel|
+    stdout_data, stderr_data = "", ""
+    exit_code, exit_signal = nil, nil
+    open_channel do |channel|
       channel.exec(command) do |_, success|
         raise "Command \"#{command}\" was unable to execute" unless success
 

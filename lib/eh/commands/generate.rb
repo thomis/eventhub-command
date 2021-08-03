@@ -1,17 +1,16 @@
-desc 'Generate template for a new processor'
+desc "Generate template for a new processor"
 command :generate do |c|
-
-  c.arg_name 'MODULE_NAME PROCESSOR_NAME'
+  c.arg_name "MODULE_NAME PROCESSOR_NAME"
   c.desc "Generate ruby based processor"
   c.command :ruby do |c|
     c.action do |global_options, options, args|
-      require 'active_support/core_ext/string/inflections'
-      require 'fileutils'
-      require 'erb'
+      require "active_support/core_ext/string/inflections"
+      require "fileutils"
+      require "erb"
 
       if args.size != 2
         puts "Needs exactly 2 arguments: eh generate processor MODULE NAME"
-        exit -1
+        exit(-1)
       end
 
       processor_module_name = args[0].camelcase
@@ -22,9 +21,9 @@ command :generate do |c|
       destination_dir = Eh::Settings.current.ruby_processors_src_dir
       destination_dir = File.join(destination_dir, "#{underscored_processor_module_name}.#{underscored_processor_class_name}")
 
-      if Dir.exists? destination_dir
+      if Dir.exist? destination_dir
         puts "#{destination_dir} already exists!"
-        exit -1
+        exit(-1)
       end
 
       template_tmp_dir = Eh::Settings.current.template_tmp_dir
@@ -32,7 +31,7 @@ command :generate do |c|
 
       FileUtils.cp_r template_tmp_dir, destination_dir
       FileUtils.rm_rf File.join(destination_dir, ".git")
-      FileUtils.rm File.join(destination_dir, 'README.md')
+      FileUtils.rm File.join(destination_dir, "README.md")
 
       puts "Generating processor #{processor_module_name}::#{processor_class_name} in #{destination_dir}"
       Dir.glob(destination_dir + "/**/*.erb") do |file|

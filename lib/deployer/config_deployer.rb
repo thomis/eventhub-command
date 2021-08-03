@@ -1,6 +1,6 @@
 class Deployer::ConfigDeployer < Deployer::BaseDeployer
   def initialize(options = {})
-    options[:deploy_via] = 'svn'
+    options[:deploy_via] = "svn"
     super(options)
   end
 
@@ -10,7 +10,7 @@ class Deployer::ConfigDeployer < Deployer::BaseDeployer
       create_base_dirs(executor)
       update_scm(executor)
 
-      source = cached_copy_dir('..', 'config', "%{stagename}", "%{hostname}", '')
+      source = cached_copy_dir("..", "config", "%{stagename}", "%{hostname}", "")
       target = config_source_dir
 
       cmd = "rsync -r --exclude=.svn #{source} #{target}"

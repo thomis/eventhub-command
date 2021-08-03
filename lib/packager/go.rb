@@ -1,6 +1,5 @@
 class Packager::Go
-
-  PLATFORMS = ['linux','windows','darwin']
+  PLATFORMS = ["linux", "windows", "darwin"]
 
   def initialize(source_dir, destination_dir, include_pattern_string, exclude_pattern_string, platform)
     @source_dir = Pathname.new(source_dir)
@@ -57,11 +56,10 @@ class Packager::Go
     puts " done".green
   end
 
-
   def files_to_zip(processor_name)
     # currently take only the binary and the config folder
-    files = Dir.glob(File.join(processor_source_dir(processor_name), 'config', '**', '*'))
-    files << File.join(processor_source_dir(processor_name),processor_name)
+    files = Dir.glob(File.join(processor_source_dir(processor_name), "config", "**", "*"))
+    files << File.join(processor_source_dir(processor_name), processor_name)
 
     files.map do |file|
       Pathname.new(file)
@@ -92,14 +90,14 @@ class Packager::Go
 
   def validate_platforms!
     unless PLATFORMS.include?(@platform)
-      raise "Given platform [#{@platform}] is not allowed out of [#{PLATFORMS.join(', ')}]"
+      raise "Given platform [#{@platform}] is not allowed out of [#{PLATFORMS.join(", ")}]"
     end
   end
 
   def processor_names
     included_names = existing_processor_names
     included_names = included_processor_names(included_names)
-    excluded_names  = excluded_processor_names(included_names)
+    excluded_names = excluded_processor_names(included_names)
     included_names - excluded_names
   end
 
@@ -131,19 +129,19 @@ class Packager::Go
   end
 
   def include_patterns
-    (include_pattern_string || '').split(',').map { |part| part.strip }
+    (include_pattern_string || "").split(",").map { |part| part.strip }
   end
 
   def exclude_patterns
-    (exclude_pattern_string || '').split(',').map { |part| part.strip }
+    (exclude_pattern_string || "").split(",").map { |part| part.strip }
   end
 
   def wildcard_pattern?(pattern)
-    pattern.end_with?('*')
+    pattern.end_with?("*")
   end
 
   def wildcard_pattern_match?(pattern, name)
-    wildcard_pattern?(pattern) && name.start_with?(pattern.gsub('*', ''))
+    wildcard_pattern?(pattern) && name.start_with?(pattern.delete("*"))
   end
 
   def pattern_match?(pattern, name)
