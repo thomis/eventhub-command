@@ -1,5 +1,5 @@
 [![Gem Version](https://badge.fury.io/rb/eventhub-command.svg)](https://badge.fury.io/rb/eventhub-command)
-[![Build Status](https://travis-ci.org/thomis/eventhub-command.svg?branch=master)](https://travis-ci.org/thomis/eventhub-command)
+![](https://github.com/thomis/eventhub-command/workflows/ci/badge.svg)
 
 eventhub-command
 ================
