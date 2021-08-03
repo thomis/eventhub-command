@@ -1,3 +1,7 @@
+## 0.10.0 (2021-08-03)
+
+* Change: Bump version
+
 ## 0.9.0 (2021-08-02)
 
 * Add: Apply ruby styles (standard gem)
