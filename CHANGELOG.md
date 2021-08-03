@@ -2,6 +2,7 @@
 
 * Add: Apply ruby styles (standard gem)
 * Add: Simple test coverage (simplecov gem)
+* Add: ci with github actions
 * Change: Update ruby to 2.6.6
 * Change: Update rake to 13.0
 * Change: Update rspec to 3.10
@@ -9,10 +10,10 @@
 * Change: Update rubyzip to 2.3
 * Change: Update net-ssh to 6.1
 * Change: Hide scm password for log output
-* Change: Update travis tested ruby versions
 * Change: Remove redundant rails_src_dir method
 * Change: rspec - improve test performance
 * Change: rspec - order is randomized
+* Delete: travis ci dependency
 
 ## 0.8.0 (2018-02-21)
 
