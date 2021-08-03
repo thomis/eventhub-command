@@ -89,7 +89,7 @@ class Deployer::Executor
   end
 
   def log_command(cmd, comment = nil)
-    puts cmd.filter.blue
+    puts filter(cmd).blue
     puts "  (#{comment})" if verbose? && comment
   end
 
