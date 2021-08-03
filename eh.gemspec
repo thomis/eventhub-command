@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.bindir = "bin"
   s.executables = ["eh"]
-  s.required_ruby_version = ">= 2.6.6"
+  s.required_ruby_version = ">= 2.4"
 
   s.add_development_dependency "bundler", "~> 2.0"
   s.add_development_dependency("rake", "~> 13.0")
