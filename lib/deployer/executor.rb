@@ -2,11 +2,13 @@ require "net/ssh"
 require "colorize"
 
 class Deployer::Executor
-  attr_reader :stage
+  attr_reader :stage, :commands
 
   def initialize(stage, options = {})
     @stage = stage
     @options = options
+    # stores all commands per given host
+    @commands = Hash.new { |h, k| h[k] = [] }
     yield(self) if block_given?
   end
 
@@ -22,18 +24,33 @@ class Deployer::Executor
         log_command("Expanded command to #{expanded_command}")
       end
       log_host(host, index)
-      result = execute_on(host, expanded_command)
-      log_result(result)
-      result
+      execute_add(host, expanded_command)
+      # result = execute_on(host, expanded_command)
+      # log_result(result)
+      # result
     end
   rescue => e
     handle_exception(e, options)
+  end
+
+  def execute_add(host, command)
+    @commands[host] << command
   end
 
   def execute_on(host, command)
     Net::SSH.start(host[:host], host[:user], port: host[:port]) do |ssh|
       ssh.exec_sc!(command, verbose?)
     end
+  end
+
+  # execute collected commands
+  def execute_commands
+    @commands.each_pair do |host, commands|
+      result = execute_on(host, commands.join("\n"))
+      log_result(result)
+    end
+  rescue => e
+    handle_exception(e, {})
   end
 
   def download(source, target, options = {})

@@ -41,6 +41,7 @@ class Deployer::MuleDeployer < Deployer::BaseDeployer
         # deploy
         executor.execute("cp #{configuration_target} $MULE_HOME/apps")
       end
+      executor.execute_commands
     end
   end
 

@@ -15,6 +15,7 @@ class Deployer::ConfigDeployer < Deployer::BaseDeployer
 
       cmd = "rsync -r --exclude=.svn #{source} #{target}"
       executor.execute(cmd)
+      executor.execute_commands
     end
   end
 end

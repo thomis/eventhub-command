@@ -49,6 +49,7 @@ class Deployer::RubyDeployer < Deployer::BaseDeployer
         cmd = inspector_command("start", processor_name)
         executor.execute(cmd, abort_on_error: false, comment: "Request to stop component")
       end
+      executor.execute_commands
     end
   end
 

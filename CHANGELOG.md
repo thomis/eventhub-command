@@ -1,3 +1,8 @@
+## 0.11.0 (2021-08-29)
+
+* Change: Batch ssh commands and execute them over one connection
+* Change: Update standard to 1.3.0
+
 ## 0.10.0 (2021-08-03)
 
 * Change: Bump version

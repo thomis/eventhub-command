@@ -56,6 +56,7 @@ class Deployer::GoDeployer < Deployer::BaseDeployer
           executor.execute(cmd, abort_on_error: false, comment: "Request to start component")
         end
       end
+      executor.execute_commands
     end
   end
 
