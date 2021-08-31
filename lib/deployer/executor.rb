@@ -7,8 +7,9 @@ class Deployer::Executor
   def initialize(stage, options = {})
     @stage = stage
     @options = options
-    # stores all commands per given host
-    @commands = Hash.new { |h, k| h[k] = [] }
+
+    reset_commands
+
     yield(self) if block_given?
   end
 
@@ -24,33 +25,43 @@ class Deployer::Executor
         log_command("Expanded command to #{expanded_command}")
       end
       log_host(host, index)
-      execute_add(host, expanded_command)
-      # result = execute_on(host, expanded_command)
-      # log_result(result)
-      # result
+      result = execute_on(host, expanded_command)
+      log_result(result)
+      result
     end
   rescue => e
     handle_exception(e, options)
   end
 
-  def execute_add(host, command)
-    @commands[host] << command
+  def execute_later(command, options = {})
+    log_command("Execute later: '#{command.strip}'", options[:comment])
+    stage.hosts.each_with_index.map do |host, index|
+      expand_options = {hostname: host[:host], stagename: stage.name, port: host[:port]}
+      expanded_command = command % expand_options
+      if expanded_command != command
+        log_command("Expanded command to #{expanded_command}")
+      end
+      @commands[host] << expanded_command
+    end
+  end
+
+  def execute_batch
+    results = []
+    @commands.each_with_index do |(host, cmds), index|
+      log_host(host, index)
+      result = execute_on(host, cmds.join("\n"))
+      log_result(result)
+      results << result
+    end
+    results.join("\n")
+  rescue => e
+    handle_exception(e, {})
   end
 
   def execute_on(host, command)
     Net::SSH.start(host[:host], host[:user], port: host[:port]) do |ssh|
       ssh.exec_sc!(command, verbose?)
     end
-  end
-
-  # execute collected commands
-  def execute_commands
-    @commands.each_pair do |host, commands|
-      result = execute_on(host, commands.join("\n"))
-      log_result(result)
-    end
-  rescue => e
-    handle_exception(e, {})
   end
 
   def download(source, target, options = {})
@@ -75,6 +86,10 @@ class Deployer::Executor
     end
   rescue => e
     handle_exception(e, options)
+  end
+
+  def reset_commands
+    @commands = Hash.new { |h, k| h[k] = [] }
   end
 
   private

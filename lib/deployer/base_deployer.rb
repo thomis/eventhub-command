@@ -15,7 +15,7 @@ class Deployer::BaseDeployer
   end
 
   def log_deployment(executor, message)
-    executor.execute("echo $(date): #{message} - #{ENV["USER"]} >> #{deploy_log_file}")
+    executor.execute_later("echo $(date): #{message} - #{ENV["USER"]} >> #{deploy_log_file}")
   end
 
   def base_dir
@@ -93,7 +93,7 @@ class Deployer::BaseDeployer
     cmds = dirs.map do |dir|
       "mkdir -p #{dir}"
     end
-    executor.execute(cmds.join(" && "))
+    executor.execute_later(cmds.join(" && "))
   end
 
   def update_scm(executor)
@@ -107,7 +107,7 @@ class Deployer::BaseDeployer
         svn co --trust-server-cert --non-interactive --username #{scm_username} --password #{scm_password} #{scm_base_url} #{dir}
       fi
     EOS
-    executor.execute(cmd)
+    executor.execute_later(cmd)
   end
 
   private

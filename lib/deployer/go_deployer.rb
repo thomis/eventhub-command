@@ -11,8 +11,9 @@ class Deployer::GoDeployer < Deployer::BaseDeployer
 
     Deployer::Executor.new(stage, verbose: verbose?) do |executor|
       create_base_dirs(executor)
-
       update_cached_copy(executor)
+      executor.execute_batch
+      executor.reset_commands
 
       # fetch processor_names unless they have been passed as an argument to the initializer
       processor_names_to_deploy = resolve_processor_names(executor, options)
@@ -24,39 +25,39 @@ class Deployer::GoDeployer < Deployer::BaseDeployer
         # stop old one
         if processor_name != "inspector"
           cmd = inspector_command("stop", processor_name)
-          executor.execute(cmd, abort_on_error: false, comment: "Request to stop component")
+          executor.execute_later(cmd, abort_on_error: false, comment: "Request to stop component")
         else
-          executor.execute("kill -s TERM $(cat #{File.join(pids_dir, processor_name)}.pid)", abort_on_error: false, comment: "This is not sooo important")
+          executor.execute_later("kill -s TERM $(cat #{File.join(pids_dir, processor_name)}.pid)", abort_on_error: false, comment: "This is not sooo important")
         end
 
         # unzip package
         target = deploy_dir("go")
         source = cached_copy_dir("go", "#{processor_name}.zip")
-        executor.execute("rm -rf #{processor_dir(processor_name)} && unzip -o -d #{target} #{source}")
+        executor.execute_later("rm -rf #{processor_dir(processor_name)} && unzip -o -d #{target} #{source}")
 
         # copy config
-        executor.execute("if [[ -d #{config_source_dir(processor_name)} ]] ; then cp -r #{config_source_dir(processor_name)}/* #{processor_dir(processor_name)}; fi")
+        executor.execute_later("if [[ -d #{config_source_dir(processor_name)} ]] ; then cp -r #{config_source_dir(processor_name)}/* #{processor_dir(processor_name)}; fi")
 
         # remove log dir if it exists
-        executor.execute("if [[ -d #{processor_dir(processor_name, "logs")} ]] ; then rm -rf #{processor_dir(processor_name, "logs")}; fi")
+        executor.execute_later("if [[ -d #{processor_dir(processor_name, "logs")} ]] ; then rm -rf #{processor_dir(processor_name, "logs")}; fi")
 
         # symlink log dir
-        executor.execute("ln -s #{logs_dir} #{processor_dir(processor_name, "logs")}")
+        executor.execute_later("ln -s #{logs_dir} #{processor_dir(processor_name, "logs")}")
 
         # symlink pids dir
-        executor.execute("ln -s #{pids_dir} #{processor_dir(processor_name, "pids")}")
+        executor.execute_later("ln -s #{pids_dir} #{processor_dir(processor_name, "pids")}")
 
         # start new one
         if processor_name == "inspector"
           # default start
-          executor.execute("cd #{processor_dir(processor_name)} && ./#{processor_name} -d -e $EH_ENV")
+          executor.execute_later("cd #{processor_dir(processor_name)} && ./#{processor_name} -d -e $EH_ENV")
         else
           # startig go via inspector
           cmd = inspector_command("start", processor_name)
-          executor.execute(cmd, abort_on_error: false, comment: "Request to start component")
+          executor.execute_later(cmd, abort_on_error: false, comment: "Request to start component")
         end
+        executor.execute_batch
       end
-      executor.execute_commands
     end
   end
 
