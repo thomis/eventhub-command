@@ -1,3 +1,9 @@
+## 0.11.0 (2022-07-27)
+
+* Add: Dependabot
+* Change: CI with Ruby 3.1
+* Change: Upgrade dependencies
+
 ## 0.10.0 (2021-08-03)
 
 * Change: Bump version
