@@ -1,0 +1,12 @@
+{
+  "repositories": [
+    {
+      "url": "https://repo1.server1.com",
+      "dir": "spec/fixtures",
+      "deploy_username": "user1",
+      "deploy_password": "password1",
+      "current": true
+    }
+  ],
+  "default_stage": "development"
+}

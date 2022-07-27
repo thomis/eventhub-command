@@ -14,5 +14,6 @@
       "deploy_password": "password2",
       "current": true
     }
-  ]
+  ],
+  "default_stage": "development"
 }
