@@ -18,6 +18,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
     strategy:
       fail-fast: false
       matrix:
@@ -35,6 +37,16 @@ jobs:
         bundler-cache: true
         cache-version: 1
 
+    - name: Code Climate setup test reporter
+      run: |
+        curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        chmod +x ./cc-test-reporter
+        ./cc-test-reporter before-build
+
     - name: Run default task
       run: |
         bundle exec rake
+
+    - name: Code Climate publish test coverage
+      run: |
+        ./cc-test-reporter after-build
