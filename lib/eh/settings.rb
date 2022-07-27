@@ -61,9 +61,7 @@ class Eh::Settings
   end
 
   def write
-    File.open(file, "w") do |f|
-      f.write(data.to_json)
-    end
+    File.write(file, data.to_json)
   end
 
   def self.current=(value)

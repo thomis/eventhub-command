@@ -3,6 +3,7 @@
 * Add: Dependabot
 * Change: CI with Ruby 3.1
 * Change: Upgrade dependencies
+* Change: Code formatting
 
 ## 0.10.0 (2021-08-03)
 

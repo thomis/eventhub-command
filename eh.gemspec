@@ -21,12 +21,12 @@ Gem::Specification.new do |s|
   s.add_development_dependency "bundler", "~> 2.0"
   s.add_development_dependency("rake", "~> 13.0")
   s.add_development_dependency("rspec", "~> 3.10")
-  s.add_development_dependency("standard", "~> 1.1.5")
+  s.add_development_dependency("standard", "~> 1.14")
   s.add_development_dependency("simplecov", "~> 0.21.2")
 
   s.add_runtime_dependency("gli", "~> 2.17")
   s.add_runtime_dependency("rubyzip", "~> 2.3")
-  s.add_runtime_dependency("net-ssh", "~> 6.1")
+  s.add_runtime_dependency("net-ssh", "~> 7.0")
   s.add_runtime_dependency("colorize", "~> 0.8")
   s.add_runtime_dependency("highline", "~> 2.0")
   s.add_runtime_dependency("parseconfig", "~> 1.0")

@@ -9,9 +9,7 @@ RSpec.configure do |config|
   config.before(:suite) do
     config_file = File.join(Dir.home, ".eh")
     unless File.exist?(config_file)
-      File.open(config_file, "w+") do |f|
-        f.write('{"proxies":[],"repositories":[{"url":"https://repo.com","dir":"eventhub","deploy_username":"a_user","deploy_password":"a_password","current":true}]}')
-      end
+      File.write(config_file, '{"proxies":[],"repositories":[{"url":"https://repo.com","dir":"eventhub","deploy_username":"a_user","deploy_password":"a_password","current":true}]}')
     end
   end
 
