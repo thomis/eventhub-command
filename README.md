@@ -1,4 +1,6 @@
 [![Gem Version](https://badge.fury.io/rb/eventhub-command.svg)](https://badge.fury.io/rb/eventhub-command)
+[![Maintainability](https://api.codeclimate.com/v1/badges/e7291af4909ed092fd84/maintainability)](https://codeclimate.com/github/thomis/eventhub-command/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/e7291af4909ed092fd84/test_coverage)](https://codeclimate.com/github/thomis/eventhub-command/test_coverage)
 ![](https://github.com/thomis/eventhub-command/workflows/ci/badge.svg)
 
 eventhub-command
@@ -12,6 +14,15 @@ Event Hub Command Line Tool includes the following features
 * Manage Repositories
 * Manage Statges
 * Manage Proxies
+
+## Supported Ruby Versions
+
+Currently supported and tested ruby versions are:
+
+- 3.1
+- 3.0
+- 2.7
+- 2.6
 
 ## Installation
 
