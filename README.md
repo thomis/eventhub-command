@@ -3,6 +3,8 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/e7291af4909ed092fd84/test_coverage)](https://codeclimate.com/github/thomis/eventhub-command/test_coverage)
 ![](https://github.com/thomis/eventhub-command/workflows/ci/badge.svg)
 
+**Note** eventhub-command CLI has been retired and will not be further maintained.
+
 eventhub-command
 ================
 
