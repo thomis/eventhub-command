@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency("rake", "~> 13.0")
   s.add_development_dependency("rspec", "~> 3.10")
   s.add_development_dependency("standard", "~> 1.14")
-  s.add_development_dependency("simplecov", "~> 0.21.2")
+  s.add_development_dependency("simplecov", "~> 0.22.0")
 
   s.add_runtime_dependency("gli", "~> 2.17")
   s.add_runtime_dependency("rubyzip", "~> 2.3")
