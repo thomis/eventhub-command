@@ -11,7 +11,7 @@ RSpec.describe Deployer::Stage do
 
   it "returns one host" do
     stage.host("host1", "port1", "user1")
-    single_host_stage = stage.single_host_stage()
+    single_host_stage = stage.single_host_stage
     expect(single_host_stage.hosts.size).to eq(1)
     expect(single_host_stage.hosts[0]).to eq({host: "host1", port: "port1", user: "user1"})
   end
