@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency("gli", "~> 2.17")
   s.add_runtime_dependency("rubyzip", "~> 2.3")
   s.add_runtime_dependency("net-ssh", "~> 7.0")
-  s.add_runtime_dependency("colorize", "~> 0.8")
+  s.add_runtime_dependency("colorize", ">= 0.8", "< 2.0")
   s.add_runtime_dependency("highline", "~> 2.0")
   s.add_runtime_dependency("parseconfig", "~> 1.0")
 end
